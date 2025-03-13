@@ -14,7 +14,7 @@ class User:
     def CreateKeyPair(self):
         self.privateKey = rsa.generate_private_key(
             public_exponent=65537,
-            key_size=512,
+            key_size=2048,
         )
         self.publicKey = self.privateKey.public_key()
 
