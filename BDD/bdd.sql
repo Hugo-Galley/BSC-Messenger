@@ -2,7 +2,8 @@ CREATE TABLE Users (
     id_user CHAR(36) PRIMARY KEY ,
     username VARCHAR(255) UNIQUE NOT NULL,
     password TEXT NOT NULL,
-    public_key VARCHAR(512) UNIQUE NOT NULL
+    public_key VARCHAR(512) UNIQUE NOT NULL,
+    salt VARCHAR(28) NOT NULL
 );
 
 CREATE TABLE Conversation (

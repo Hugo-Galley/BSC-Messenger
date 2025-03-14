@@ -32,11 +32,6 @@ if __name__ == "__main__":
     signInButton = ctk.CTkButton(registerFrame, text="Sign Up !", command=lambda: CreateUser(usernameEntry.get(),mdpEntry.get()), font=("Ariel",10), width=100)
     signInButton.pack(pady=20)
 
-
-
-
-
-
     registerFrame.pack(pady=20,padx=20)
 
     app.title("BSC Messenger")

@@ -2,8 +2,7 @@ import base64
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives import serialization
-
-import config
+from os import urandom
 
 
 class User:
@@ -13,6 +12,7 @@ class User:
         self.password = password
         self.publicKey = ""
         self.privateKey = ""
+        self.salt = base64.b64encode(urandom(16)).decode('utf-8')
 
     def CreateKeyPair(self):
         self.privateKey = rsa.generate_private_key(
@@ -36,7 +36,7 @@ class User:
         return (self.publicKey,self.privateKey)
 
     def HashAndSaltPassword(self):
-        self.password += "47798d12ae31ce5a6d9c9dddec7bc9f2a27fffa424b7f2a154fa0e26690972de"
+        self.password += self.salt
         digest = hashes.Hash(hashes.SHA256())
         digest.update(self.password.encode())
         self.password = base64.b64encode(digest.finalize()).decode('utf-8')
