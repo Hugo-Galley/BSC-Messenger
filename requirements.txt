@@ -1,5 +1,0 @@
-cryptography
-logging
-colorlog
-mysql.connector
-customtkinter
