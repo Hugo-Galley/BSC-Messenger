@@ -1,12 +1,21 @@
 import json
 import logging
 import colorlog
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 def load_config():
     with open("variables.json") as f:
         return json.load(f)
 
+def configBdd():
+    engine = create_engine(f"mysql+pymysql://{data['Bdd']['User']}:{data['Bdd']['Password']}@{data['Bdd']['Host']}:{data['Bdd']['Port']}/{data['Bdd']['DataBase']}")
+    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    db = SessionLocal()
+    return db
+
 data =load_config()
+db = configBdd()
 
 def setupLog():
 
@@ -38,11 +47,3 @@ def setupLog():
 
     loggger.addHandler(console_handler)
     loggger.addHandler(file_handler)
-
-configBdd = {
-    "host": data["Bdd"]["Host"],
-    "user": data["Bdd"]["User"],
-    "password": data["Bdd"]["Password"],
-    "database": data["Bdd"]["DataBase"],
-    "port": data["Bdd"]["Port"]
-}

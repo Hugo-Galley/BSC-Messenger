@@ -10,8 +10,8 @@ class User:
     def __init__(self,username, password):
         self.username = username
         self.password = password
-        self.publicKey = ""
-        self.privateKey = ""
+        self.publicKey = None
+        self.privateKey = None
         self.salt = base64.b64encode(os.urandom(16)).decode('utf-8')
 
     def CreateKeyPair(self):
@@ -21,25 +21,24 @@ class User:
         )
         self.publicKey = self.privateKey.public_key()
         os.makedirs(os.path.join(os.getcwd(), "clients", self.username), exist_ok=True)
-        self.GetkeyPairInTextFormat()
+        (publicKey,privateKey) = self.GetkeyPairInTextFormat()
         with open(os.path.join("clients", self.username, "privateKey.key"), mode="w+") as f:
-            f.write(self.privateKey)
+            f.write(privateKey)
 
 
 
     def GetkeyPairInTextFormat(self):
-        self.privateKey = self.privateKey.private_bytes(
+        privateKey_pem = self.privateKey.private_bytes(
         encoding=serialization.Encoding.PEM,
         format=serialization.PrivateFormat.PKCS8,
         encryption_algorithm=serialization.NoEncryption()
 
             ).decode('utf-8')
-        self.publicKey = self.publicKey.public_bytes(
+        publicKey_pem = self.publicKey.public_bytes(
         encoding=serialization.Encoding.PEM,
         format=serialization.PublicFormat.SubjectPublicKeyInfo
             )
-
-        return (self.publicKey,self.privateKey)
+        return (publicKey_pem,privateKey_pem)
 
     def HashAndSaltPassword(self):
         self.password += self.salt

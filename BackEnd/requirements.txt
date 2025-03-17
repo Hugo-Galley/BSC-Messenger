@@ -1,5 +1,6 @@
 cryptography
 logging
 colorlog
-mysql.connector
-customtkinter
+sqlalchemy
+pymysql
+sqlacodegen
