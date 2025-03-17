@@ -1,6 +1,6 @@
 import logging
 from models import Users
-from Class.User import User
+from Class.class_object import User
 import uuid
 from sqlalchemy.orm import Session
 
