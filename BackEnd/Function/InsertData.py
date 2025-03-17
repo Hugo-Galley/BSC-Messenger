@@ -4,7 +4,7 @@ from Class.User import User
 import uuid
 from sqlalchemy.orm import Session
 
-def CreateUser(db: Session, username, password):
+def CreateUser(db: Session, username : str, password : str):
     user = User(username,password)
     user.CreateKeyPair()
     user.HashAndSaltPassword()

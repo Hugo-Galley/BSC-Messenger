@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from models import Users
 
 
-def LoginUser(db: Session, username ,password):
+def LoginUser(db: Session, username : str ,password : str):
     digest = hashes.Hash(hashes.SHA256())
     digest.update(password.encode())
     userData  = db.query(models.Users).filter(Users.username == username).first()

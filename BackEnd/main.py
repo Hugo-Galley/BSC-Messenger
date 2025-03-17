@@ -8,7 +8,7 @@ if __name__ == "__main__":
     try:
         # user = User("HugoNouveau","Test")
         # user.CreateKeyPair();
-        CreateUser(db,"Axeltest","Test")
+        CreateUser(db,"Axtest","Test")
         # user.CreateKeyPair()
         #LoginUser(db,"HugoNouveau","Test")
     finally:

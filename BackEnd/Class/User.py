@@ -13,6 +13,7 @@ class User:
         self.publicKey = None
         self.privateKey = None
         self.salt = base64.b64encode(os.urandom(16)).decode('utf-8')
+        self.id = None
 
     def CreateKeyPair(self):
         self.privateKey = rsa.generate_private_key(
@@ -45,5 +46,11 @@ class User:
         digest = hashes.Hash(hashes.SHA256())
         digest.update(self.password.encode())
         self.password = base64.b64encode(digest.finalize()).decode('utf-8')
+
+    def GetIdFromDatabase(self):
+        """
+        Pouvoir recuperer l'id de l'utilisateurs depuis la bdd
+        """
+        pass
 
 

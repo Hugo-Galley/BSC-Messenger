@@ -18,5 +18,6 @@ CREATE TABLE Messages (
     id_message CHAR(36) PRIMARY KEY ,
     content TEXT NOT NULL,
     id_receiver CHAR(36) NOT NULL,
+    sendAt DATE NOT NULL
     FOREIGN KEY (id_receiver) REFERENCES Users(id_user) ON DELETE CASCADE
 );
