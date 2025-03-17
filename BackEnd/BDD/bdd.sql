@@ -1,3 +1,5 @@
+CREATE  databases BCS;
+
 CREATE TABLE Users (
     id_user CHAR(36) PRIMARY KEY,
     username VARCHAR(255) UNIQUE NOT NULL,

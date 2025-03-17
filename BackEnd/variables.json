@@ -5,8 +5,8 @@
   "Bdd" : {
     "Host" : "localhost",
     "User" : "root",
-    "Password" : "root",
-    "DataBase" : "BSC-Messenger",
-    "Port" : "8889"
+    "Password" : "",
+    "DataBase" : "BSC",
+    "Port" : "3306"
   }
 }

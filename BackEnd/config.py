@@ -1,6 +1,7 @@
 import json
 import logging
 import colorlog
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -18,7 +19,7 @@ data =load_config()
 db = configBdd()
 
 def setupLog():
-
+    os.makedirs(os.path.join(os.getcwd(), "log"), exist_ok=True)
     loggger = logging.getLogger()
     loggger.setLevel(logging.DEBUG)
 
