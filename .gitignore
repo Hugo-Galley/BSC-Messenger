@@ -182,3 +182,4 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+variables.json
