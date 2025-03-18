@@ -1,0 +1,49 @@
+
+.preview{
+    width: 25vw;
+    height: 10vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.preview-icon{
+    font-size: 2em;
+    border-radius: 5em;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 4.5vw;
+    height: 8vh;
+    margin-left: 10px;
+    color: black;
+    border: 1px black solid;
+}
+.preview-conv-head{
+    width: 18vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+
+}
+.preview-conv{
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+    height: 8vh;
+    align-items: center;
+}
+.preview-conv-head-title{
+    font-size: 1.3em;
+    color: black;
+}
+.preview-conv-head-LastMessagedate{
+    color: grey;
+    font-size: 0.9em;
+}
+.preview-conv-body{
+    color: grey;
+    width: 18vw;
+}

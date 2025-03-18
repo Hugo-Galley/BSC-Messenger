@@ -2,9 +2,9 @@ import '../Styles/ConversationCard.css'
 
 export default function ConversationCard({icon,title,LastMessagedate,body}){
     return(
-        <div>
+        <div className='preview'>
             {/* <img src={img} alt=""/> */}
-            <p>{icon}</p>
+            <p className='preview-icon'>{icon}</p>
             <div className="preview-conv">
                 <div className="preview-conv-head">
                     <p className="preview-conv-head-title">{title}</p>
