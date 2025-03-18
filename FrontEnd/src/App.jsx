@@ -1,13 +1,14 @@
 import './App.css'
-import ConversationCard from './components/ConversationCard'
+import ConversationBar from './components/ConversationBar'
+import '@mantine/core/styles.css'
+import { MantineProvider } from '@mantine/core'
 
 function App() {
 
   return (
-    <div>
-        <ConversationCard icon={"HG"} title={"Axel"} LastMessagedate={"Samedi"} body={"Mon super Message test"}/>
-
-    </div>
+    <MantineProvider>
+        <ConversationBar/>
+    </MantineProvider>
   )
 }
 

@@ -10,6 +10,7 @@ CREATE TABLE Conversation (
     id_conversation CHAR(36) PRIMARY KEY ,
     id_user1 CHAR(36) NOT NULL,
     id_user2 CHAR(36) NOT NULL,
+    icon TEXT NOT NULL,
     FOREIGN KEY (id_user1) REFERENCES Users(id_user) ON DELETE CASCADE,
     FOREIGN KEY (id_user2) REFERENCES Users(id_user) ON DELETE CASCADE
 );

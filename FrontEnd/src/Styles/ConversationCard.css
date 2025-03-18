@@ -5,9 +5,13 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    background-color: transparent;
+    backdrop-filter: blur(5px); 
+    border-radius: 20px;
+
 }
 .preview-icon{
-    font-size: 2em;
+    font-size: 1.7em;
     border-radius: 5em;
     text-align: center;
     display: flex;
@@ -17,7 +21,9 @@
     height: 8vh;
     margin-left: 10px;
     color: black;
-    border: 1px black solid;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+     background: linear-gradient(to right, rgb(255, 204, 204), rgb(255, 153, 153))
+    
 }
 .preview-conv-head{
     width: 18vw;
