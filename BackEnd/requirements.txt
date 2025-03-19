@@ -4,3 +4,5 @@ colorlog
 sqlalchemy
 pymysql
 sqlacodegen
+fastapi
+uvicorn
