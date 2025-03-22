@@ -20,7 +20,6 @@ avec des objets
 
 - `React` : possibilité de travailler avec des composants, et de disposer des nombreuses librairies disponibles
 - `Vite` : pour pouvoir créer facilement et rapidement un projet React, avec un serveur de développement au démarrage ultra rapide qui ne recharge que les modules modifiés
-- `Maintine` : pour profiter d'un UI Kit de qualité, pour avoir un beau design et profiter des nombreux composant mis à notre disposition. De plus il est *_Open Source_*
 
 ### Base de données
 

@@ -1,14 +1,12 @@
 import './App.css'
 import ConversationBar from './components/ConversationBar'
-import '@mantine/core/styles.css'
-import { MantineProvider } from '@mantine/core/esm'
 
 function App() {
 
   return (
-    <MantineProvider>
-         <ConversationBar/> 
-    </MantineProvider>
+    <div>
+     <ConversationBar/>
+    </div>
   )
 }
 
