@@ -2,8 +2,9 @@ CREATE TABLE Users (
     id_user CHAR(36) PRIMARY KEY,
     username VARCHAR(255) UNIQUE NOT NULL,
     password TEXT NOT NULL,
-    public_key VARCHAR(256) UNIQUE NOT NULL,
-    salt VARCHAR(28) NOT NULL
+    public_key TEXT UNIQUE NOT NULL,
+    salt VARCHAR(28) NOT NULL,
+    icon TEXT,
 ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE Conversation (
@@ -20,5 +21,7 @@ CREATE TABLE Messages (
     content TEXT NOT NULL,
     id_receiver CHAR(36) NOT NULL,
     sendAt DATE NOT NULL,
-    FOREIGN KEY (id_receiver) REFERENCES Users(id_user) ON DELETE CASCADE
+    id_conversation CHAR(36) NOT NULL,
+    FOREIGN KEY (id_receiver) REFERENCES Users(id_user) ON DELETE CASCADE,
+    FOREIGN KEY (id_conversation) REFERENCES Conversation(id_conversation) ON DELETE CASCADE
 );

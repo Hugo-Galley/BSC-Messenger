@@ -7,8 +7,8 @@ from Class.class_object import User
 if __name__ == "__main__":
     setupLog()
     try:
-        user = User("HugoNouveau","Test")
-        # user.CreateKeyPair();
+        # user = User("SuperTest","Test")
+        CreateUser(db, "PatrickBruel","Test")
         # user.CreateKeyPair()
         #LoginUser(db,"HugoNouveau","Test")
     finally:

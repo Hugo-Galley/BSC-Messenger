@@ -1,3 +1,5 @@
+import datetime
+
 from pydantic import BaseModel
 
 class AuthRequest(BaseModel):
@@ -5,3 +7,12 @@ class AuthRequest(BaseModel):
     password : str
 class GetUserRequest(BaseModel):
     id : str
+class CreateNewConversation(BaseModel):
+    id_user1 : str
+    id_user2 : str
+class AddMessageToConversation(BaseModel):
+    id_receiver : str
+    content : str
+    conversation_id : str
+    sendAt : datetime.date
+    id_conversation : str
