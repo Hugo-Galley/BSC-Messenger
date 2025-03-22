@@ -19,6 +19,7 @@ class Users(Base):
     password: Mapped[str] = mapped_column(Text)
     public_key: Mapped[str] = mapped_column(String(512))
     salt: Mapped[str] = mapped_column(String(28))
+    icon : Mapped[str] = mapped_column(String(255))
 
     Conversation: Mapped[List['Conversation']] = relationship('Conversation', foreign_keys='[Conversation.id_user1]', back_populates='Users_')
     Conversation_: Mapped[List['Conversation']] = relationship('Conversation', foreign_keys='[Conversation.id_user2]', back_populates='Users1')

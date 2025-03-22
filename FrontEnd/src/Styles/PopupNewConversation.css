@@ -1,0 +1,89 @@
+.popup-new-conversation .popup-body{
+    background-color: aliceblue;
+    width: 40vw;
+    height: 60vh;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    border-radius: 1.3em;
+    justify-content: center;
+}
+.popup-new-conversation .contact-item{
+    display: flex;
+    flex-direction: row;
+    width: auto;
+    padding: 20px;
+}
+.popup-title{
+    text-align: center;
+    font-size: 1.4em;
+    font-weight: 800;
+    padding: 0 10px 10px 10px;
+}
+.popup-contact-list-title{
+    text-align: left;
+    padding: 10px;
+    color: grey;
+    
+}
+.popup-contact-list-name{
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+}
+.popup-contact-list-icon{
+    display: flex;
+    border: 1px black solid;
+    width: 3vw;
+    height: 5vh;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    background: linear-gradient(to right, rgb(255, 204, 204), rgb(255, 153, 153))
+}
+.contact-item:hover{
+    background-color: rgba(132, 134, 132, 0.566);
+}
+.popup-textInput{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    border-bottom: 1px solid rgba(193, 193, 193, 0.545);
+    border-top: 1px solid rgba(193, 193, 193, 0.545);
+}
+.inputSearch{
+    width: 93%;
+    border: none;
+}
+.A{
+    width: 7%;
+    padding-left: 10px;
+}
+.popup-contact-list{
+    overflow: scroll;
+}
+.closeButton{
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+}
+.close-buttton-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+}
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}

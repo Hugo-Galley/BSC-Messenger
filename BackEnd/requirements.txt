@@ -6,3 +6,4 @@ pymysql
 sqlacodegen
 fastapi
 uvicorn
+pydantic
