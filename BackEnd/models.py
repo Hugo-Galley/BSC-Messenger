@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from sqlalchemy import CHAR, Date, ForeignKeyConstraint, Index, String, Text
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
@@ -18,8 +18,8 @@ class Users(Base):
     username: Mapped[str] = mapped_column(String(255))
     password: Mapped[str] = mapped_column(Text)
     public_key: Mapped[str] = mapped_column(Text)
-    salt: Mapped[str] = mapped_column(String(28)),
-    icon: Mapped[str] = mapped_column(String(255))
+    salt: Mapped[str] = mapped_column(String(28))
+    icon: Mapped[Optional[str]] = mapped_column(Text)
 
     Conversation: Mapped[List['Conversation']] = relationship('Conversation', foreign_keys='[Conversation.id_user1]', back_populates='Users_')
     Conversation_: Mapped[List['Conversation']] = relationship('Conversation', foreign_keys='[Conversation.id_user2]', back_populates='Users1')
@@ -38,7 +38,6 @@ class Conversation(Base):
     id_conversation: Mapped[str] = mapped_column(CHAR(36), primary_key=True)
     id_user1: Mapped[str] = mapped_column(CHAR(36))
     id_user2: Mapped[str] = mapped_column(CHAR(36))
-    icon: Mapped[str] = mapped_column(Text)
 
     Users_: Mapped['Users'] = relationship('Users', foreign_keys=[id_user1], back_populates='Conversation')
     Users1: Mapped['Users'] = relationship('Users', foreign_keys=[id_user2], back_populates='Conversation_')

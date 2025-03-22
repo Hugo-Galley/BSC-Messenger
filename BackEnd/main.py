@@ -8,7 +8,7 @@ if __name__ == "__main__":
     setupLog()
     try:
         # user = User("SuperTest","Test")
-        CreateUser(db, "PatrickBruel","Test")
+        CreateUser(db, "MarioCotillard","Test")
         # user.CreateKeyPair()
         #LoginUser(db,"HugoNouveau","Test")
     finally:

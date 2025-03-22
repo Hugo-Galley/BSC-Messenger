@@ -13,6 +13,5 @@ class CreateNewConversation(BaseModel):
 class AddMessageToConversation(BaseModel):
     id_receiver : str
     content : str
-    conversation_id : str
-    sendAt : datetime.date
+    sendAt : str
     id_conversation : str

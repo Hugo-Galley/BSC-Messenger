@@ -1,10 +1,10 @@
 import ConversationCard from "./ConversationCard";
 import '../Styles/ConversationBar.css'
-import {TextInput } from "@mantine/core";
+// import {TextInput } from "@mantine/core/";
 import { IconSearch } from '@tabler/icons-react'
 import { IconEdit } from "@tabler/icons-react";
 import { useState } from 'react';
-import PopUpNewConversation from "./PopUpNewConversation";
+// import PopUpNewConversation from "./PopUpNewConversation";
 
 export default function ConversationBar(){
     const [showPopUp, setShowPopUp] = useState(false)
@@ -65,23 +65,22 @@ export default function ConversationBar(){
         "body" : "Mon super message de test"
     }
 ]
-    const icon = <IconSearch size={16}/>;
+    // const icon = <IconSearch size={16}/>;
 return(
     <div className="ConversationBar-container">
         <div className="searchbar-head">
-            <TextInput 
+            {/* <TextInput 
             placeholder="votre conv"
             leftSection={icon}
             style={{width:300, marginRight:10}}
             radius={"md"}
-            />
+            /> */}
             <IconEdit size="35" onClick={() => setShowPopUp(true)} style={{ cursor: 'pointer' }}/>
         </div>
-        {/* Component that appears on click */}
         {showPopUp && (
                 <div className="overlay">
                     <div className="popup-new-conversation">
-                        <PopUpNewConversation onClose={() => setShowPopUp(false)}/>
+                        {/* <PopUpNewConversation onClose={() => setShowPopUp(false)}/> */}
                     </div>
                 </div>
         )}
