@@ -39,5 +39,7 @@ button, input, select, textarea {
   border: none;
   outline: none;
 }
-
-/* Ajoutez vos autres styles ici */
+.mainScreen{
+  display: flex;
+  flex-direction: row;
+}

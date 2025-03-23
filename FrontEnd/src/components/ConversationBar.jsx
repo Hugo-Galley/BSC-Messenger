@@ -1,68 +1,23 @@
 import ConversationCard from "./ConversationCard";
 import '../Styles/ConversationBar.css'
-// import {TextInput } from "@mantine/core/";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PopUpNewConversation from "./PopUpNewConversation";
+import getInformations from "../scripts/GetInformations";
 
 export default function ConversationBar(){
     const [showPopUp, setShowPopUp] = useState(false)
-    const listOfConversation = [{
-        "id" : "SuperId",
-        "icon" : "HG",
-        "title" : "Axel", 
-        "lastMessageDate" : "Samedi",
-        "body" : "Mon super message de test",
-    },
-    {
-        "id" : "SuperId",
-        "icon" : "HG",
-        "title" : "Axel", 
-        "lastMessageDate" : "Samedi",
-        "body" : "Mon super message de test"
-    },
-    {
-        "id" : "SuperId",
-        "icon" : "HG",
-        "title" : "Axel", 
-        "lastMessageDate" : "Samedi",
-        "body" : "Mon super message de test"
-    },
-    {
-        "id" : "SuperId",
-        "icon" : "HG",
-        "title" : "Axel", 
-        "lastMessageDate" : "Samedi",
-        "body" : "Mon super message de test"
-    },  
-    {
-        "id" : "SuperId",
-        "icon" : "HG",
-        "title" : "Axel", 
-        "lastMessageDate" : "Samedi",
-        "body" : "Mon super message de test"
-    }, 
-    {
-        "id" : "SuperId",
-        "icon" : "HG",
-        "title" : "Axel", 
-        "lastMessageDate" : "Samedi",
-        "body" : "Mon super message de test"
-    }, 
-    {
-        "id" : "SuperId",
-        "icon" : "HG",
-        "title" : "Axel", 
-        "lastMessageDate" : "Samedi",
-        "body" : "Mon super message de test"
-    }, 
-    {
-        "id" : "SuperId",
-        "icon" : "HG",
-        "title" : "Axel", 
-        "lastMessageDate" : "Samedi",
-        "body" : "Mon super message de test"
-    }
-]
+    const [listOfConversation, setListOfConversation] = useState([])
+    useEffect(() => {
+        async function fetchUsers(){
+            try {
+                const users = await getInformations("http://localhost:8000/conversation/allOfUser?id_user=01f1b7bd-3283-4961-8364-750646e53cc9")
+                setListOfConversation(users)
+            } catch (error) {
+                console.error("Erreur lors de la récupération des utilisateurs:", error)
+            }
+        }
+        fetchUsers()
+    }, [])
    
 return(
     <div className="ConversationBar-container">
@@ -91,7 +46,7 @@ return(
         <div className="conversationBar-body">
         {
             listOfConversation.map((convCard, index) => (
-                <a href={`https://galleyhugo.com/${convCard.id}`}
+                <a href={`https://galleyhugo.com/${convCard.id_conversation}`}
                  key={index} className="conversation-items"><ConversationCard  key={index}
                                                 icon={convCard.icon}
                                                 title={convCard.title} 

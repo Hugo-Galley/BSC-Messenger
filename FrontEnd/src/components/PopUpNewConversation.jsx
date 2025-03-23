@@ -1,13 +1,13 @@
 import '../Styles/PopupNewConversation.css'
 import { useState, useEffect } from "react";
-import getAllUsers from "../scripts/GetAllUsers";
+import getInformations from '../scripts/GetInformations';
 
 export default function PopUpNewConversation({ onClose }){
     const [listOfUSer, setListOfUser] = useState([])
     useEffect(() => {
         async function fetchUsers(){
             try {
-                const users = await getAllUsers()
+                const users = await getInformations("http://localhost:8000/users/all")
                 setListOfUser(users)
             } catch (error) {
                 console.error("Erreur lors de la récupération des utilisateurs:", error)

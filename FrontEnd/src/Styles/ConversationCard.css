@@ -52,4 +52,6 @@
 .preview-conv-body{
     color: grey;
     width: 18vw;
+    overflow: hidden;
+    flex-wrap: wrap;
 }

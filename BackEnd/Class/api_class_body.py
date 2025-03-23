@@ -15,3 +15,5 @@ class AddMessageToConversation(BaseModel):
     content : str
     sendAt : str
     id_conversation : str
+class GetAllConversationForUser(BaseModel):
+    id_user : str
