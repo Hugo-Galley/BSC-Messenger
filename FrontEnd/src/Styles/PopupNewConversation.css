@@ -54,9 +54,27 @@
     border-bottom: 1px solid rgba(193, 193, 193, 0.545);
     border-top: 1px solid rgba(193, 193, 193, 0.545);
 }
-.inputSearch{
+.inputSearch {
     width: 93%;
+    padding: 10px 15px;
     border: none;
+    background-color: #f5f7fa;
+    border-radius: 20px;
+    font-size: 14px;
+    color: #4a4a4a;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    outline: none;
+}
+
+.inputSearch:focus {
+    background-color: white;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), 0 0 0 2px rgba(66, 153, 225, 0.2);
+}
+
+.inputSearch::placeholder {
+    color: #a0aec0;
+    font-style: italic;
 }
 .A{
     width: 7%;
@@ -64,6 +82,8 @@
 }
 .popup-contact-list{
     overflow: scroll;
+    min-height: 46vh;
+
 }
 .close-button{
     display: flex;

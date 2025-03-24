@@ -3,7 +3,7 @@
     flex-direction: column;
     height: 100vh;
     width: 30vw;
-    border: 1px black solid;  
+    border: 1px rgba(0, 0, 0, 0.232) solid;  
     background-color: #f5f7fa;
 }
 
@@ -47,4 +47,10 @@
     align-items: center;
     display: flex;
     position: fixed;
+}
+.input-conv::placeholder{
+    padding: 10px;
+}
+.input-conv{
+    width: 100%;
 }

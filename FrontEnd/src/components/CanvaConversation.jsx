@@ -26,7 +26,7 @@ export default function CanvaConversation({id_conversation}){
         },
     ]
     return(
-        <div>
+        <div className="main-container-canva">
            <div className="headCanvaConversation">
                 <p className="head-icon">HG</p>
                 <p className="head-name">Galley Hugo et Flahaut Axel</p>
@@ -34,7 +34,7 @@ export default function CanvaConversation({id_conversation}){
            <div>
            {
                     message.map((messageValue, index) => (
-                    <div className="message">
+                    <div className="message" key={index}>
                         <div className={`message-container-${messageValue.type}`}>
                             <p className="message-icon">HG</p>
                             <MessageBox key={index} content={messageValue.content} sendAt={messageValue.sendAt} type={messageValue.type}/>

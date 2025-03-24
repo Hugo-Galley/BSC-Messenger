@@ -1,11 +1,14 @@
+.main-container-canva{
+    background-color: #f5f7fa;
+}
 .headCanvaConversation{
-
+    
     width: 70vw; 
     display: flex;
     height: 10vh;
     justify-content: center;
     align-items: center;
-    border-bottom: 1px solid black;
+    border: 1px rgba(0, 0, 0, 0.232) solid;  
 }
 .head-icon{
     background: linear-gradient(to right, rgb(255, 204, 204), rgb(255, 153, 153));
@@ -13,8 +16,9 @@
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     font-size: 1.5em;
     border-radius: 50%;
-    width: 3vw;
-    height: 6vh;
+    width: 60px;
+    height: 60px;
+    aspect-ratio: 1/1;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -23,15 +27,16 @@
     display: flex;
     flex-direction: row;
     align-items: flex-end;
-    background-color: red;
+
 }
 .message-icon{
     background: linear-gradient(to right, rgb(255, 204, 204), rgb(255, 153, 153));
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    font-size: 1.2em;
+    font-size: 1em;
     border-radius: 50%;
-    width: 1.7vw;
-    height: 4vh;
+    width: 40px;
+    height: 40px;
+    aspect-ratio: 1/1;
     display: flex;
     justify-content: center;
     align-items: center;

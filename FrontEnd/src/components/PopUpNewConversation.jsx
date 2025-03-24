@@ -4,11 +4,17 @@ import getInformations from '../scripts/GetInformations';
 
 export default function PopUpNewConversation({ onClose }){
     const [listOfUSer, setListOfUser] = useState([])
+    const [sortList, setSortList] = useState([])
+    function sortUser(event, users){
+        setSortList(listOfUSer)
+        setSortList(users.filter(user => user.username.toLowerCase().includes(event.target.value.toLowerCase())))
+    }
     useEffect(() => {
         async function fetchUsers(){
             try {
                 const users = await getInformations("http://localhost:8000/users/all")
                 setListOfUser(users)
+                setSortList(users)
             } catch (error) {
                 console.error("Erreur lors de la récupération des utilisateurs:", error)
             }
@@ -23,13 +29,13 @@ export default function PopUpNewConversation({ onClose }){
             <h3 className="popup-title">Nouveau Message</h3>
             <div className="popup-textInput">
                 <p className="A">À :</p>
-                <input placeholder="Rechercher" className="inputSearch"/>
+                <input placeholder="Rechercher" className="inputSearch"  onChange={() => sortUser(event,listOfUSer)}/>
             </div>
        
         <div className="popup-contact-list">
             <p className="popup-contact-list-title">Suggestions</p>
             {
-                listOfUSer.map((user,index) =>(
+                sortList.map((user,index) =>(
                     <a href="https://apple.com" key={index} className="contact-item">
                         <p className="popup-contact-list-icon">{user.icon}</p>
                         <p className="popup-contact-list-name">{user.username}</p>
