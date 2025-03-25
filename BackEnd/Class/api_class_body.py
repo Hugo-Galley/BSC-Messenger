@@ -6,7 +6,7 @@ class AuthRequest(BaseModel):
     username : str
     password : str
 class GetUserRequest(BaseModel):
-    id : str
+    username : str
 class CreateNewConversation(BaseModel):
     id_user1 : str
     id_user2 : str
