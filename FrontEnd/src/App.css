@@ -39,7 +39,15 @@ button, input, select, textarea {
   border: none;
   outline: none;
 }
-.mainScreen{
+.mainScreen {
   display: flex;
-  flex-direction: row;
+  height: 100vh;
+  overflow: hidden;
 }
+.mainScreen > div:nth-child(2) {
+  flex-grow: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+

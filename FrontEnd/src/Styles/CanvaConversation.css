@@ -1,14 +1,22 @@
 .main-container-canva{
     background-color: #f5f7fa;
+    display: flex;
+    flex-direction: column;
+    height: 100vh; 
+    overflow: hidden; 
 }
 .headCanvaConversation{
-    
     width: 70vw; 
     display: flex;
     height: 10vh;
     justify-content: center;
     align-items: center;
     border: 1px rgba(0, 0, 0, 0.232) solid;  
+    padding: 15px;
+    background-color: #fff;
+    border-bottom: 1px solid #e5e7eb;
+    flex-shrink: 0;
+    z-index: 10;
 }
 .head-icon{
     background: linear-gradient(to right, rgb(255, 204, 204), rgb(255, 153, 153));
@@ -27,7 +35,8 @@
     display: flex;
     flex-direction: row;
     align-items: flex-end;
-
+    margin-bottom: 15px;
+    width: 100%;
 }
 .message-icon{
     background: linear-gradient(to right, rgb(255, 204, 204), rgb(255, 153, 153));
@@ -56,14 +65,22 @@
     justify-content: left;
     align-items: flex-end;
 }
-.main-container-canva {
+.messages-container {
+    flex-grow: 1; 
+    overflow-y: auto; 
+    padding: 15px;
     display: flex;
     flex-direction: column;
-    height: 100%;
 }
 
-.messages-container {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding: 10px;
+.message-input-container {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    border-top: 1px solid #e5e7eb;
+    padding: 15px;
+    z-index: 10;
+    flex-shrink: 0; 
 }

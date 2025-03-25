@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import '../Styles/CanvaConversation.css';
 import MessageBox from './MessageBox';
 import MessageInput from './MessageInput';
@@ -28,13 +28,20 @@ export default function CanvaConversation({id_conversation}){
     ]);
     
     const [isLoading, setIsLoading] = useState(false);
+    const messagesEndRef = useRef(null);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [message]);
     
     const handleSendMessage = (messageText) => {
         setIsLoading(true);
         
-        // Simuler un délai d'envoi (vous le remplacerez par votre appel API)
         setTimeout(() => {
-            // Ajouter le nouveau message à la liste
             const newMessage = {
                 content: messageText,
                 sendAt: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
@@ -64,9 +71,10 @@ export default function CanvaConversation({id_conversation}){
                     </div>
                     ))
                 }
+                {}
+                <div ref={messagesEndRef} />
            </div>
            
-           {}
            <MessageInput 
                 onSendMessage={handleSendMessage} 
                 conversationId={id_conversation}

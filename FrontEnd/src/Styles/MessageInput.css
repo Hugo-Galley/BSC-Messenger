@@ -1,8 +1,11 @@
 .message-input-container {
-    padding: 15px;
     background-color: #fff;
     border-top: 1px solid #e5e7eb;
-    position: relative;
+    padding: 15px;
+    z-index: 10;
+    position: sticky; 
+    bottom: 0; 
+    width: 100%;
 }
 
 .message-form {
