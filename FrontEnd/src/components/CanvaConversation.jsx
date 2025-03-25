@@ -8,22 +8,26 @@ export default function CanvaConversation({id_conversation}){
         {
             "content" : "Salut ça va",
             "sendAt" : "13:30",
-            "type": "received"
+            "type": "received",
+            "icon" : "HG"
         },
         {
             "content" : "Oui ça va super et toi",
             "sendAt" : "13:35",
-            "type": "sent"
+            "type": "sent",
+            "icon" : "AF"
         },
         {
             "content" : "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sapiente aliquam magnam distinctio, similique explicabo illum ipsum alias unde eaque laudantium amet, debitis maiores autem necessitatibus exercitationem. Molestias quae nobis et!",
             "sendAt" : "13:39",
-            "type": "received"
+            "type": "received",
+            "icon" : "HG"
         },
         {
             "content" : "Ok génial ça ",
             "sendAt" : "13:40",
-            "type": "sent"
+            "type": "sent",
+            "icon" : "AF"
         },
     ]);
     
@@ -65,7 +69,7 @@ export default function CanvaConversation({id_conversation}){
                     message.map((messageValue, index) => (
                     <div className="message" key={index}>
                         <div className={`message-container-${messageValue.type}`}>
-                            <p className="message-icon">HG</p>
+                            <p className="message-icon">{messageValue.icon}</p>
                             <MessageBox key={index} content={messageValue.content} sendAt={messageValue.sendAt} type={messageValue.type}/>
                         </div>
                     </div>

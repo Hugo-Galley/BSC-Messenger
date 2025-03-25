@@ -6,7 +6,7 @@ from config import db
 import uuid
 from cryptography.hazmat.primitives import hashes
 import base64
-from Class.api_class_body import AuthRequest, GetUserRequest
+from Class.api_class_body import AuthRequest, GetUserRequest, RegisterUser
 
 
 router = APIRouter()
@@ -37,20 +37,19 @@ async def auth_user(auth_data : AuthRequest):
         return {"message" : "L'utilisateur n'existe pas", "authorize": "false"}
 
 @router.post("/users/register")
-async def post_user(auth_data : AuthRequest):
+async def post_user(auth_data : RegisterUser):
     try:
         ifExistsUserData = db.query(Users).filter(Users.username == auth_data.username).first()
         if ifExistsUserData:
             return {"Message" : "Un utilisateur existe déja avec se nom d'utilisateur", "exists" : "true"}
         user = User(auth_data.username,auth_data.password)
-        user.CreateKeyPair()
         user.HashAndSaltPassword()
-        (publicKey,privateKey) = user.GetkeyPairInTextFormat()
         newUser = Users(id_user=str(uuid.uuid4()),
                                username=user.username,
                                password=user.password,
-                               public_key=publicKey,
-                               salt=user.salt)
+                               public_key=auth_data.publicKey,
+                               salt=user.salt,
+                               icon=auth_data.icon)
         db.add(newUser)
         db.commit()
         return {"Message" : f"User {auth_data.username} crée avec succées", "exists" : "false"}

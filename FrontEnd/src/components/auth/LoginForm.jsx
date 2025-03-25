@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import '../../Styles/Auth.css';
+import { CreateUserInIndexeed } from '../../scripts/CreateUserInIndexed';
 
 export default function LoginForm({ onSwitchToRegister, onLoginSuccess}) {
     const [username, setUsername] = useState('');
@@ -15,7 +16,6 @@ export default function LoginForm({ onSwitchToRegister, onLoginSuccess}) {
         try {
             console.log('Tentative de connexion avec:', { username, password });
             
-            // Remplacer la requête GET par une requête POST avec le corps
             const response = await fetch('http://localhost:8000/users/auth/', {
                 method: 'POST',
                 headers: {
@@ -34,10 +34,9 @@ export default function LoginForm({ onSwitchToRegister, onLoginSuccess}) {
             }
             
             const data = await response.json();
-            console.log('Réponse du serveur:', data);
 
             if (data.authorize === "true") {
-                // Utiliser aussi une requête POST pour récupérer les données utilisateur
+               
                 const userResponse = await fetch('http://localhost:8000/users/', {
                     method: 'POST',
                     headers: {
@@ -47,7 +46,6 @@ export default function LoginForm({ onSwitchToRegister, onLoginSuccess}) {
                         username: username,
                     }),
                 });
-                
                 const userData = await userResponse.json();
                 console.log('Données utilisateur récupérées:', userData);
 

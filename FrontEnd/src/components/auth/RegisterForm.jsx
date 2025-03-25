@@ -1,9 +1,11 @@
 import { useState} from 'react';
 import '../../Styles/Auth.css';
+import { CreateUserInIndexeed } from '../../scripts/CreateUserInIndexed';
 
 export default function RegisterForm({ onSwitchToLogin, onRegisterSuccess }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [icon, setIcon] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -21,7 +23,7 @@ export default function RegisterForm({ onSwitchToLogin, onRegisterSuccess }) {
 
         try {
             console.log('Envoi des données:', { username, password });
-            
+            const publicKey = await CreateUserInIndexeed(username)
             const response = await fetch('http://localhost:8000/users/register', {
                 method: 'POST',
                 headers: {
@@ -30,6 +32,9 @@ export default function RegisterForm({ onSwitchToLogin, onRegisterSuccess }) {
                 body: JSON.stringify({
                     username,
                     password,
+                    publicKey,
+                    icon
+                    
                 }),
             });
             
@@ -40,9 +45,7 @@ export default function RegisterForm({ onSwitchToLogin, onRegisterSuccess }) {
             }
             
             const data = await response.json();
-            console.log('Réponse du serveur:', data);
             
-            // Vérifiez les deux possibilités (exist ou exists)
             if (data.exist === "true" || data.exists === "true") {
                 setError('Ce nom d\'utilisateur existe déjà');
             } else {
@@ -93,6 +96,17 @@ export default function RegisterForm({ onSwitchToLogin, onRegisterSuccess }) {
                                 id='confirmPassword'
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
+                                required
+                            />
+                        </div>
+
+                        <div className='form-group'>
+                            <label htmlFor='icon'>Entrer votre Icon</label>
+                            <input
+                                type='text'
+                                id='icon'
+                                value={icon}
+                                onChange={(e) => setIcon(e.target.value)}
                                 required
                             />
                         </div>

@@ -7,6 +7,11 @@ class AuthRequest(BaseModel):
     password : str
 class GetUserRequest(BaseModel):
     username : str
+class RegisterUser(BaseModel):
+    username : str
+    password : str
+    icon : str
+    publicKey : str
 class CreateNewConversation(BaseModel):
     id_user1 : str
     id_user2 : str

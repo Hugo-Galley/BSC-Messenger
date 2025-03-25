@@ -30,8 +30,6 @@ class User:
         with open(os.path.join("clients", self.username, "privateKey.key"), mode="w+") as f:
             f.write(privateKey)
 
-
-
     def GetkeyPairInTextFormat(self):
         privateKey_pem = self.privateKey.private_bytes(
         encoding=serialization.Encoding.PEM,
