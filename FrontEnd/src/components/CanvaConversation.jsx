@@ -1,9 +1,10 @@
-// import { useState } from 'react'
-import '../Styles/CanvaConversation.css'
+import { useState } from 'react';
+import '../Styles/CanvaConversation.css';
 import MessageBox from './MessageBox';
+import MessageInput from './MessageInput';
+
 export default function CanvaConversation({id_conversation}){
-    // const [message, setMessage] = useState([]);
-    const message = [
+    const [message, setMessage] = useState([
         {
             "content" : "Salut ça va",
             "sendAt" : "13:30",
@@ -24,15 +25,36 @@ export default function CanvaConversation({id_conversation}){
             "sendAt" : "13:40",
             "type": "sent"
         },
-    ]
+    ]);
+    
+    const [isLoading, setIsLoading] = useState(false);
+    
+    const handleSendMessage = (messageText) => {
+        setIsLoading(true);
+        
+        // Simuler un délai d'envoi (vous le remplacerez par votre appel API)
+        setTimeout(() => {
+            // Ajouter le nouveau message à la liste
+            const newMessage = {
+                content: messageText,
+                sendAt: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+                type: "sent"
+            };
+            
+            setMessage([...message, newMessage]);
+            setIsLoading(false);
+        }, 500);
+    };
+    
     return(
         <div className="main-container-canva">
            <div className="headCanvaConversation">
                 <p className="head-icon">HG</p>
                 <p className="head-name">Galley Hugo et Flahaut Axel</p>
            </div>
-           <div>
-           {
+           
+           <div className="messages-container">
+                {
                     message.map((messageValue, index) => (
                     <div className="message" key={index}>
                         <div className={`message-container-${messageValue.type}`}>
@@ -41,10 +63,15 @@ export default function CanvaConversation({id_conversation}){
                         </div>
                     </div>
                     ))
-            }
-
+                }
            </div>
+           
+           {}
+           <MessageInput 
+                onSendMessage={handleSendMessage} 
+                conversationId={id_conversation}
+                isLoading={isLoading} 
+           />
         </div>
-    )
-    
+    );
 }
