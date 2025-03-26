@@ -1,78 +1,31 @@
 import { useState } from 'react';
+import LoginUser from '../../scripts/Auth';
 import '../../Styles/Auth.css';
-import { CreateUserInIndexeed } from '../../scripts/CreateUserInIndexed';
 
-export default function LoginForm({ onSwitchToRegister, onLoginSuccess}) {
+export default function LoginForm({ onSwitchToRegister, loginSucces}) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const [isLoading, setIsLoading]= useState(false);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError('');
-        setIsLoading(true);
-
-        try {
-            console.log('Tentative de connexion avec:', { username, password });
-            
-            const response = await fetch('http://localhost:8000/users/auth/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    username,
-                    password,
-                }),
-            });
-            
-            console.log('Statut de la réponse:', response.status);
-            
-            if (!response.ok) {
-                throw new Error(`Erreur HTTP: ${response.status}`);
-            }
-            
-            const data = await response.json();
-
-            if (data.authorize === "true") {
-               
-                const userResponse = await fetch('http://localhost:8000/users/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        username: username,
-                    }),
-                });
-                const userData = await userResponse.json();
-                console.log('Données utilisateur récupérées:', userData);
-
-                localStorage.setItem('user', JSON.stringify({
-                    id: userData.id,
-                    username: userData.username,
-                }));
-
-                onLoginSuccess(userData);
-            } else {
-                setError('Nom d\'utilisateur ou mot de passe incorrect');
-            }
-        } catch (error) {
-            console.error('Erreur détaillée:', error);
-            setError(`Erreur de connexion: ${error.message}`);
-        } finally {
-            setIsLoading(false);
+    async function VerifySucces(e){
+        e.preventDefault()
+        console.log("On verifie le succées")
+        const result = await LoginUser(username, password, e)
+        if (result !== false){
+            setError("Nom d'utilisateur ou mot de passe incorect") 
         }
-    };
+        else{
+            loginSucces(result)
+        }
+
+    }
 
     return (
         <div className='auth-container'>
             <div className='auth-card'>
                 <h2> Connexion </h2>
-                <form onSubmit={handleSubmit}>
-                    {error && <div className='error-message'>{error}</div>}
-
+                <form onSubmit={VerifySucces}>
+                {error && <div className="error-message">{error}</div>}
                     <div className='form-group'>
                         <label htmlFor='username'>Nom d'utilisateur</label>
                         <input
@@ -95,13 +48,13 @@ export default function LoginForm({ onSwitchToRegister, onLoginSuccess}) {
                             />
                     </div>
 
-                    <button type='submit' className='auth-button' disabled={isLoading}>
-                        {isLoading ? 'Connexion...' : 'Se connecter'}
+                    <button type='submit' className='auth-button'>
+                         Se connecter
                     </button>
                 </form>
 
                 <div className='auth-footer'>
-                    <p>Pas encoe de compte ?</p>
+                    <p>Pas encore de compte ?</p>
                     <button onClick={onSwitchToRegister} className='switch-button'>
                         S'inscrire
                     </button>

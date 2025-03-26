@@ -13,7 +13,6 @@ export default function AuthPage({ onAuthSuccess }) {
 
   const handleRegisterSuccess = () => {
     setRegistrationSuccess(true);
-    setIsLoginView(true); // Basculer vers la connexion après une inscription réussie
   };
 
   return (
@@ -35,7 +34,7 @@ export default function AuthPage({ onAuthSuccess }) {
             setIsLoginView(false);
             setRegistrationSuccess(false);
           }}
-          onLoginSuccess={handleLoginSuccess}
+          loginSucces={handleLoginSuccess}
         />
       ) : (
         <RegisterForm 

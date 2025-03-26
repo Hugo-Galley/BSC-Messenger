@@ -31,7 +31,6 @@ export default function CanvaConversation({id_conversation}){
         },
     ]);
     
-    const [isLoading, setIsLoading] = useState(false);
     const messagesEndRef = useRef(null);
 
     const scrollToBottom = () => {
@@ -43,7 +42,6 @@ export default function CanvaConversation({id_conversation}){
     }, [message]);
     
     const handleSendMessage = (messageText) => {
-        setIsLoading(true);
         
         setTimeout(() => {
             const newMessage = {
@@ -53,7 +51,6 @@ export default function CanvaConversation({id_conversation}){
             };
             
             setMessage([...message, newMessage]);
-            setIsLoading(false);
         }, 500);
     };
     
@@ -82,7 +79,6 @@ export default function CanvaConversation({id_conversation}){
            <MessageInput 
                 onSendMessage={handleSendMessage} 
                 conversationId={id_conversation}
-                isLoading={isLoading} 
            />
         </div>
     );

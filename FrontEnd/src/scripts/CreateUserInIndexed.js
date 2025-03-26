@@ -52,17 +52,15 @@ export async function CreateUserInIndexeed(username) {
                 
                 addRequest.onsuccess = function() {
                     console.log("Utilisateur ajouté avec succès !");
-                    resolve(publicKey);
+                    return publicKey
                 };
                 
                 addRequest.onerror = function(event) {
                     console.error("Erreur lors de l'ajout de l'utilisateur:", event.target.error);
-                    reject(event.target.error);
                 };
             }
             catch (error) {
                 console.error("Erreur lors de l'ajout du User", error);
-                reject(error);
             }
         };
     });

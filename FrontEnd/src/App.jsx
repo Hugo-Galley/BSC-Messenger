@@ -8,7 +8,6 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userData, setUserData] = useState(null);
 
-  // Vérifier si l'utilisateur est déjà connecté au chargement
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
