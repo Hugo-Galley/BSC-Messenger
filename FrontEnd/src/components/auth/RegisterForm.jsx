@@ -1,7 +1,6 @@
 import { useState} from 'react';
 import '../../Styles/Auth.css';
 import { RegisterUser } from '../../scripts/Auth';
-import { CreateUserInIndexeed } from '../../scripts/CreateUserInIndexed';
 
 export default function RegisterForm({ onSwitchToLogin, onRegisterSuccess }) {
     const [username, setUsername] = useState('');
@@ -10,9 +9,10 @@ export default function RegisterForm({ onSwitchToLogin, onRegisterSuccess }) {
     const [error, setError] = useState('')
 
     async function VerifyRegister(e){
-        const [message,result] = await RegisterUser(username,password,e)
+        const [message,result] = await RegisterUser(username,password,icon,e)
         if(result){
             onRegisterSuccess(result)
+            onSwitchToLogin()
         }
         else{
             setError(message)
@@ -26,7 +26,7 @@ export default function RegisterForm({ onSwitchToLogin, onRegisterSuccess }) {
         <div className='auth-container'>
             <div className='auth-card'>
                 <h2>Inscription</h2>
-                <form onSubmit={VerifyRegister}>
+                <form onSubmit={(e) => VerifyRegister(e)}>
                     {error && <div className='error-message'>{error}</div>}
 
                     <div className='form-group'>

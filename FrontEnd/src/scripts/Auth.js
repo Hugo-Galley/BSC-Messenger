@@ -49,8 +49,10 @@ export default async function LoginUser(username, password, event){
 export async function RegisterUser(username, password, icon, event ){
     event.preventDefault()
     try {
-        const publicKey = CreateUserInIndexeed(username)
-        const response = await fetch("http://localhost:8000/users/register'", {
+        const publicKey = await CreateUserInIndexeed(username)
+        console.log("Clé public vaux ", publicKey)
+        console.log("envoie de la requete")
+        const response = await fetch("http://localhost:8000/users/register", {
             method : 'POST',
             headers : {
                 'Content-Type' : 'application/json'
@@ -63,16 +65,16 @@ export async function RegisterUser(username, password, icon, event ){
 
             }),
         })
+        console.log("Reponse ", response.status)
         const data = await response.json()
+        console.log("donnée recu ",data)
 
         if (data.exist === "true"){
-            return ("L'utilisateur existe déja",false)
+            return ["L'utilisateur existe déja",false]
         }
         else{
-            return true
+            return ["Inscription réussi",true]
         }
-
-        
 
 
     } catch (error) {

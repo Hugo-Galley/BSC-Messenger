@@ -16,7 +16,7 @@ async def get_users(get_user : GetUserRequest):
     logging.debug(f"L'id récuperé est {get_user.username}")
     userData = db.query(Users).filter(Users.username == get_user.username).first()
     if userData:
-        return {"id" : userData.id_user, "username": userData.username, "password" : userData.password, "publicKey" : userData.public_key, "salt" : userData.salt}
+        return {"id" : userData.id_user, "username": userData.username, "password" : userData.password, "publicKey" : userData.public_key, "salt" : userData.salt, "icon" : userData.icon}
     else:
         logging.error("L'utilisateur n'existe pas")
         return {"message" : "L'utilisateur demande n'existe pas"}
@@ -38,6 +38,7 @@ async def auth_user(auth_data : AuthRequest):
 
 @router.post("/users/register")
 async def post_user(auth_data : RegisterUser):
+    logging.info(auth_data)
     try:
         ifExistsUserData = db.query(Users).filter(Users.username == auth_data.username).first()
         if ifExistsUserData:

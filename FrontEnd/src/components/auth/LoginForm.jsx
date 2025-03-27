@@ -11,7 +11,7 @@ export default function LoginForm({ onSwitchToRegister, loginSucces}) {
         e.preventDefault()
         console.log("On verifie le succées")
         const result = await LoginUser(username, password, e)
-        if (result !== false){
+        if (result === false){
             setError("Nom d'utilisateur ou mot de passe incorect") 
         }
         else{
