@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import PopUpNewConversation from "./PopUpNewConversation";
 import getInformations from "../scripts/GetInformations";
 
-export default function ConversationBar({ userData, onLogout }) {
+export default function ConversationBar({ userData, onLogout, onsSelectedConversations }) {
     const [showPopUp, setShowPopUp] = useState(false);
     const [listOfConversation, setListOfConversation] = useState([]);
     const [sortList, setSortList] = useState([]);
@@ -66,7 +66,7 @@ export default function ConversationBar({ userData, onLogout }) {
             <div className="conversationBar-body">
                 {sortList.length > 0 ? (
                     sortList.map((convCard, index) => (
-                        <a href={`/conversation/${convCard.id_conversation}`}
+                        <button onClick={() => onsSelectedConversations(convCard.conversation_id)}
                             key={index} className="conversation-items">
                             <ConversationCard
                                 key={index}
@@ -74,7 +74,7 @@ export default function ConversationBar({ userData, onLogout }) {
                                 title={convCard.title}
                                 LastMessagedate={convCard.lastMessageDate}
                                 body={convCard.body} />
-                        </a>
+                        </button>
                     ))
                 ) : (
                     <div className="no-conversations">

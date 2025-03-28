@@ -9,6 +9,7 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     line-height: 1.4;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
 .messageBox.received {
@@ -56,6 +57,7 @@
 .messageText {
     word-wrap: break-word;
     margin: 0;
+    overflow: hidden;
 }
 
 

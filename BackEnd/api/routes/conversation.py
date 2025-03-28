@@ -3,12 +3,13 @@ import logging
 import uuid
 from config import db
 from fastapi import APIRouter
-from Class.api_class_body import CreateNewConversation, AddMessageToConversation, GetAllConversationForUser
+from Class.api_class_body import CreateNewConversation, AddMessageToConversation, GetConversationInfo
 from models import Conversation, Messages, Users
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives.serialization import load_pem_public_key
 from sqlalchemy import desc
+from sqlalchemy.orm import aliased
 
 
 router = APIRouter()
@@ -68,16 +69,29 @@ async def get_all_conversation_for_user(id_user : str):
     else:
         logging.error(f"Erreur lors de la récuperération des conversation pour le user {id_user} ")
         return []
-@router.get("/conversation/allMessage")
-async def get_all_message(id_conversation : str):
+@router.post("/conversation/allMessage")
+async def get_all_message(get_conversaion : GetConversationInfo):
     messagesData = (db.query(Messages)
-                    .filter(Messages.id_conversation == id_conversation)
+                    .filter(Messages.id_conversation == get_conversaion.id_conversation)
                     .all())
     if messagesData:
-        logging.info(f"Messages de la conversation {id_conversation} récupoeré avec suucées")
+        logging.info(f"Messages de la conversation {get_conversaion.id_conversation} récupoeré avec suucées")
         return [{"content" : message.content, "id_receiver" : message.id_receiver, "sendAt" : message.sendAt} for message in messagesData]
     else:
-        logging.error(f"Erreur lors de la récupération des messages de la conversation {id_conversation}")
+        logging.error(f"Erreur lors de la récupération des messages de la conversation {get_conversaion.id_conversation}")
 
+@router.post("/conversation/info")
+async def get_conversation_info(get_conversation : GetConversationInfo):
+    user1_alias = aliased(Users, name="user1")
+    user2_alias = aliased(Users, name="user2")
+    conversationInfo = (db.query(Conversation, user1_alias, user2_alias)
+                        .join(user1_alias, user1_alias.id_user == Conversation.id_user1)
+                        .join(user2_alias, user2_alias.id_user == Conversation.id_user2)
+                        .filter(Conversation.id_conversation == get_conversation.id_conversation)
+                        .first())
 
+    if conversationInfo:
+        return {"name" : f"{conversationInfo[1].username} et {conversationInfo[2].username}","icon" : conversationInfo[1].icon}
+    else:
+        return {"Error" : "Conversation non trouvé"}
 

@@ -22,3 +22,6 @@ class AddMessageToConversation(BaseModel):
     id_conversation : str
 class GetAllConversationForUser(BaseModel):
     id_user : str
+
+class GetConversationInfo(BaseModel):
+    id_conversation : str

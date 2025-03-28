@@ -7,6 +7,7 @@ import AuthPage from './pages/AuthPage'
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [selectedConversation, setSelectedConversation] = useState("")
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -33,14 +34,17 @@ function App() {
     setUserData(null);
   };
 
+  function handleSelectedConversation(conversationId){
+    setSelectedConversation(conversationId)
+  }
   return (
     <>
       {!isAuthenticated ? (
         <AuthPage onAuthSuccess={handleAuthSuccess} />
       ) : (
         <div className='mainScreen'>
-          <ConversationBar userData={userData} onLogout={handleLogout} />
-          <CanvaConversation />
+          <ConversationBar userData={userData} onLogout={handleLogout} onsSelectedConversations={handleSelectedConversation} />
+          <CanvaConversation id_conversation={selectedConversation}/>
         </div>
       )}
     </>

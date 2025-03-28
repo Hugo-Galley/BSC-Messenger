@@ -2,44 +2,32 @@ import { useState, useEffect, useRef } from 'react';
 import '../Styles/CanvaConversation.css';
 import MessageBox from './MessageBox';
 import MessageInput from './MessageInput';
+import getConversation from '../scripts/GetConversation';
 
 export default function CanvaConversation({id_conversation}){
-    const [message, setMessage] = useState([
-        {
-            "content" : "Salut ça va",
-            "sendAt" : "13:30",
-            "type": "received",
-            "icon" : "HG"
-        },
-        {
-            "content" : "Oui ça va super et toi",
-            "sendAt" : "13:35",
-            "type": "sent",
-            "icon" : "AF"
-        },
-        {
-            "content" : "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sapiente aliquam magnam distinctio, similique explicabo illum ipsum alias unde eaque laudantium amet, debitis maiores autem necessitatibus exercitationem. Molestias quae nobis et!",
-            "sendAt" : "13:39",
-            "type": "received",
-            "icon" : "HG"
-        },
-        {
-            "content" : "Ok génial ça ",
-            "sendAt" : "13:40",
-            "type": "sent",
-            "icon" : "AF"
-        },
-    ]);
+    const [message, setMessage] = useState([]);
+    const [convName, setConvName] = useState("");
+    const [convIcon, setConvIcon] = useState("");
     
     const messagesEndRef = useRef(null);
 
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    };
-
     useEffect(() => {
-        scrollToBottom();
-    }, [message]);
+        async function fetchData(){
+            try {
+                if (id_conversation){
+                    const [msgList, infoConv] = await getConversation("25acdda2-51c3-4977-a97c-955043230ce5")
+                    if (infoConv !== false){
+                        setMessage(msgList)
+                        setConvName(infoConv.name)
+                        setConvIcon(infoConv.icon)
+                }
+                }
+            } catch (error) {
+                console.error("Erreur lors de la récuoération des messages : ", error)
+            }
+        }
+        fetchData()
+    }, [id_conversation])
     
     const handleSendMessage = (messageText) => {
         
@@ -57,8 +45,8 @@ export default function CanvaConversation({id_conversation}){
     return(
         <div className="main-container-canva">
            <div className="headCanvaConversation">
-                <p className="head-icon">HG</p>
-                <p className="head-name">Galley Hugo et Flahaut Axel</p>
+                <p className="head-icon">{convIcon}</p>
+                <p className="head-name">{convName}</p>
            </div>
            
            <div className="messages-container">
