@@ -45,6 +45,18 @@ export default async function getConversation(id_conversation){
             }
             messageList.push(dico)
         }
+        const infoDataFinalze = {
+            "name" : infoData.name,
+            "icon" : infoData.icon,
+            "myId" : myid,
+            "herId" : ""
+        }
+        if (infoData.id_user1 === myid){
+            infoDataFinalze.herId = infoData.id_user2
+        }
+        else{
+            infoDataFinalze.herId = infoData.id_user1
+        }
     
         return [messageList,infoData]
      }

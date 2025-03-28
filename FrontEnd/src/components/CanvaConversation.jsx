@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import '../Styles/CanvaConversation.css';
 import MessageBox from './MessageBox';
 import MessageInput from './MessageInput';
@@ -6,11 +6,15 @@ import getConversation from '../scripts/GetConversation';
 
 export default function CanvaConversation({id_conversation}){
     const [message, setMessage] = useState([]);
+    const [convInfo, setConvInfo] = useState();
     const [convName, setConvName] = useState("");
     const [convIcon, setConvIcon] = useState("");
+    const [refreshTrigger, setRefreshTrigger] = useState(0); 
     
-    const messagesEndRef = useRef(null);
-
+        
+    function handleMessageSent(){
+        setRefreshTrigger(prev => prev + 1)
+    }
     useEffect(() => {
         async function fetchData(){
             try {
@@ -18,6 +22,7 @@ export default function CanvaConversation({id_conversation}){
                     const [msgList, infoConv] = await getConversation("25acdda2-51c3-4977-a97c-955043230ce5")
                     if (infoConv !== false){
                         setMessage(msgList)
+                        setConvInfo(infoConv)
                         setConvName(infoConv.name)
                         setConvIcon(infoConv.icon)
                 }
@@ -27,20 +32,8 @@ export default function CanvaConversation({id_conversation}){
             }
         }
         fetchData()
-    }, [id_conversation])
-    
-    const handleSendMessage = (messageText) => {
-        
-        setTimeout(() => {
-            const newMessage = {
-                content: messageText,
-                sendAt: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
-                type: "sent"
-            };
-            
-            setMessage([...message, newMessage]);
-        }, 500);
-    };
+    }, [id_conversation, refreshTrigger])
+
     
     return(
         <div className="main-container-canva">
@@ -61,12 +54,12 @@ export default function CanvaConversation({id_conversation}){
                     ))
                 }
                 {}
-                <div ref={messagesEndRef} />
            </div>
            
            <MessageInput 
-                onSendMessage={handleSendMessage} 
                 conversationId={id_conversation}
+                conversationInfo={convInfo}
+                onMessagesent={handleMessageSent}
            />
         </div>
     );

@@ -1,21 +1,23 @@
 import { useState} from "react";
 import '../Styles/MessageInput.css';
+import SendMessage from "../scripts/SendMessage";
 
-export default function MessageInput({ onSendMessage}) {
+export default function MessageInput({conversationId, conversationInfo, onMessagesent}) {
     const [message, setMessage] = useState(''); 
 
-
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        onSendMessage(message.trim());
-        setMessage('');
-    };
+    async function SendMessageInConversation(e){
+        e.preventDefault()
+        await SendMessage(message, conversationId,conversationInfo.herId)
+        setMessage("")
+        if (onMessagesent){
+            onMessagesent()
+        }
+    }
 
 
     return (
         <div className="message-input-container">
-            <form onSubmit={handleSubmit} className="message-form">
+            <form onSubmit={SendMessageInConversation} className="message-form">
 
                 <div className="input-wrapper">
                     <textarea

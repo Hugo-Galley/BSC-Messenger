@@ -56,13 +56,16 @@ async def add_message_to_conversation(add_to_conv : AddMessageToConversation):
 
 @router.get("/conversation/allOfUser")
 async def get_all_conversation_for_user(id_user : str):
-    conversationsData = ((db.query(Conversation)
-                         .join(Messages, Messages.id_conversation == Conversation.id_conversation))
-                         .join(Users, Users.id_user == Conversation.id_user1)
-                         .order_by(desc(Messages.sendAt))
-                         .filter(Users.id_user == id_user)
-                         .with_entities(Users.username, Conversation.id_conversation, Users.icon, Messages.sendAt, Messages.content)
-                         .all())
+    conversationsData = (
+        db.query(Users.username, Conversation.id_conversation, Users.icon, Messages.sendAt, Messages.content)
+        .join(Messages, Messages.id_conversation == Conversation.id_conversation)
+        .join(Users, Users.id_user == Conversation.id_user1)
+        .filter(Users.id_user == id_user)
+        .order_by(Conversation.id_conversation,
+                  desc(Messages.sendAt))
+        .distinct(Conversation.id_conversation)
+        .all()
+    )
     if conversationsData:
         logging.info(f"Récupération effectué avec succées pour le User {id_user}")
         return [{"conversation_id" : conversation.id_conversation, "icon" : conversation.icon, "title" : conversation.username, "lastMessageDate" : conversation.sendAt, "body" : conversation.content} for conversation in conversationsData]
@@ -91,7 +94,7 @@ async def get_conversation_info(get_conversation : GetConversationInfo):
                         .first())
 
     if conversationInfo:
-        return {"name" : f"{conversationInfo[1].username} et {conversationInfo[2].username}","icon" : conversationInfo[1].icon}
+        return {"name" : f"{conversationInfo[1].username} et {conversationInfo[2].username}","icon" : conversationInfo[1].icon, "id_user1" : conversationInfo[1].id_user , "id_user2" : conversationInfo[2].id_user}
     else:
         return {"Error" : "Conversation non trouvé"}
 
