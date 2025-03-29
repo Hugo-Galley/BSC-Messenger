@@ -4,10 +4,11 @@ import { useState, useEffect } from 'react';
 import PopUpNewConversation from "./PopUpNewConversation";
 import getInformations from "../scripts/GetInformations";
 
-export default function ConversationBar({ userData, onLogout, onsSelectedConversations }) {
+export default function ConversationBar({ userData, onLogout, onsSelectedConversations, activeConversationId }) {
     const [showPopUp, setShowPopUp] = useState(false);
     const [listOfConversation, setListOfConversation] = useState([]);
     const [sortList, setSortList] = useState([]);
+    const [isempty, setIsempty] = useState(false)
 
     function sortConversation(event, conversations) {
         setSortList(listOfConversation);
@@ -18,8 +19,15 @@ export default function ConversationBar({ userData, onLogout, onsSelectedConvers
         async function fetchConversations() {            
             try {
                 const conversations = await getInformations(`http://localhost:8000/conversation/allOfUser?id_user=${userData.id}`);
-                setListOfConversation(conversations);
-                setSortList(conversations);
+                const conversationTableau = Array.isArray(conversations) ? conversations : []
+                if (conversationTableau === "empty" || !conversations || conversations.length === 0) {
+                    setIsempty(true)
+                } else {
+                    setIsempty(false)
+                }
+                setListOfConversation(conversationTableau);
+                setSortList(conversationTableau);
+
             } catch (error) {
                 console.error("Erreur lors de la récupération des utilisateurs:", error);
             }
@@ -64,14 +72,15 @@ export default function ConversationBar({ userData, onLogout, onsSelectedConvers
             )}
 
             <div className="conversationBar-body">
-                {sortList.length > 0 ? (
+                {!isempty? (
                     sortList.map((convCard, index) => (
-                        <button onClick={() => onsSelectedConversations(convCard.conversation_id)}
-                            key={index} className="conversation-items">
+                        <button onClick={() => onsSelectedConversations(convCard.id_conversation)}
+                            key={index} 
+                            className={`conversation-items ${convCard.id_conversation === activeConversationId ? 'active' : ''}`}>
                             <ConversationCard
                                 key={index}
                                 icon={convCard.icon}
-                                title={convCard.title}
+                                title={convCard.name}
                                 LastMessagedate={convCard.lastMessageDate}
                                 body={convCard.body} />
                         </button>

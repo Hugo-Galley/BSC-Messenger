@@ -11,8 +11,9 @@
 .popup-new-conversation .contact-item{
     display: flex;
     flex-direction: row;
-    width: auto;
+    width: 100%;
     padding: 20px;
+    background-color: transparent;
 }
 .popup-title{
     text-align: center;
@@ -33,15 +34,15 @@
 }
 .popup-contact-list-icon{
     display: flex;
-    border: 1px black solid;
-    width: 3vw;
-    height: 5vh;
+    width: 40px;
+    height: 40px;
+    aspect-ratio: 1/1;
     text-align: center;
     align-items: center;
     justify-content: center;
     border-radius: 20px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    background: linear-gradient(to right, rgb(255, 204, 204), rgb(255, 153, 153))
+    background: linear-gradient(to right, rgb(255, 204, 204), rgb(255, 153, 153));
 }
 .contact-item:hover{
     background-color: rgba(132, 134, 132, 0.566);

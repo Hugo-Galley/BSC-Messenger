@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import '../Styles/CanvaConversation.css';
 import MessageBox from './MessageBox';
 import MessageInput from './MessageInput';
-import getConversation from '../scripts/GetConversation';
+import getConversation from '../scripts/Conversation';
 
 export default function CanvaConversation({id_conversation}){
     const [message, setMessage] = useState([]);
@@ -19,12 +19,13 @@ export default function CanvaConversation({id_conversation}){
         async function fetchData(){
             try {
                 if (id_conversation){
-                    const [msgList, infoConv] = await getConversation("25acdda2-51c3-4977-a97c-955043230ce5")
+                    const [msgList, infoConv] = await getConversation(id_conversation)
                     if (infoConv !== false){
                         setMessage(msgList)
                         setConvInfo(infoConv)
                         setConvName(infoConv.name)
                         setConvIcon(infoConv.icon)
+                        console.log(infoConv)
                 }
                 }
             } catch (error) {
@@ -44,6 +45,7 @@ export default function CanvaConversation({id_conversation}){
            
            <div className="messages-container">
                 {
+                    message.length > 0 ?(  
                     message.map((messageValue, index) => (
                     <div className="message" key={index}>
                         <div className={`message-container-${messageValue.type}`}>
@@ -52,6 +54,12 @@ export default function CanvaConversation({id_conversation}){
                         </div>
                     </div>
                     ))
+                ) : (
+                    <div className="empty-conversation">
+                    <p>Cette conversation ne contient aucun message.</p>
+                    <p className="empty-hint">Envoyez le premier message pour démarrer la conversation !</p>
+                </div>
+                )
                 }
                 {}
            </div>

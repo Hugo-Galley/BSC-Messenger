@@ -7,7 +7,7 @@
     background-color: #f5f7fa;
 }
 
-.ConversationBar-container a {
+.ConversationBar-container button {
     display: block;
     text-decoration: none;
     color: inherit;
@@ -19,9 +19,6 @@
     justify-content: space-between;
     align-items: center;
     margin: 20px;
-    /* background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); */
 }
 
 .conversationBar-body{
@@ -39,6 +36,9 @@
     margin-left: 10px;
     margin-right: 10px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+.conversation-items:hover{
+    background-color: rgb(173, 173, 173);
 }
 .popup-new-conversation{
     background-color: rgba(75, 75, 75, 0.311);
@@ -74,4 +74,14 @@
 .inputSearch::placeholder {
     color: #a0aec0;
     font-style: italic;
+}
+.conversation-items.active {
+    background-color: #e6f2ff; /* Bleu clair */
+    border-left: 3px solid #0084ff; /* Bordure bleue à gauche */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Modifier le style hover pour qu'il soit différent de l'état actif */
+.conversation-items:hover:not(.active) {
+    background-color: #f0f0f0;
 }

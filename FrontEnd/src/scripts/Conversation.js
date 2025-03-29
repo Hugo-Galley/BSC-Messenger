@@ -30,6 +30,7 @@ export default async function getConversation(id_conversation){
         }
         const data = await response.json()
         const infoData = await infoResponse.json()
+
         for (let i = 0; i < data.length; i++) {
             const dico = {
                 "content" : data[i].content,
@@ -57,14 +58,42 @@ export default async function getConversation(id_conversation){
         else{
             infoDataFinalze.herId = infoData.id_user1
         }
-    
-        return [messageList,infoData]
+        console.log(data)
+        console.log(infoData)
+        if (data.empty === "true"){
+            return [[], infoDataFinalze] 
+        }
+        return [messageList,infoDataFinalze]
      }
      catch(error){
         console.error("Erreur lors de la recupérations des conversations: ", error)
         return [false, false]
      }
-    
-    
-    
+}
+
+export async function CreateConversation(id_user){
+    const storedUser = localStorage.getItem("user")
+    const myid = storedUser ? JSON.parse(storedUser).id : ""
+
+    const response = await fetch("http://localhost:8000/conversation/new", {
+        method : 'POST',
+        headers : {
+             'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify({
+            id_user1 : myid,
+            id_user2 : id_user
+    })
+    })
+    if (!response.ok){
+        console.error("Erreur lors de la création d'une conversation")
+    }
+    const data = await response.json()
+    if (data.succes === "true"){
+        return true
+    }
+    else{
+        return false
+    }
+
 }

@@ -1,6 +1,7 @@
 import '../Styles/PopupNewConversation.css'
 import { useState, useEffect } from "react";
 import getInformations from '../scripts/GetInformations';
+import { CreateConversation } from '../scripts/Conversation';
 
 export default function PopUpNewConversation({ onClose }){
     const [listOfUSer, setListOfUser] = useState([])
@@ -21,6 +22,9 @@ export default function PopUpNewConversation({ onClose }){
         }
         fetchUsers()
     }, [])
+    async function CreateNewConversation(id_user){
+        CreateConversation(id_user)
+    }
     return(
             <div className="popup-body">
                 <div className="close-button-container">
@@ -36,10 +40,10 @@ export default function PopUpNewConversation({ onClose }){
             <p className="popup-contact-list-title">Suggestions</p>
             {
                 sortList.map((user,index) =>(
-                    <a href="https://apple.com" key={index} className="contact-item">
+                    <button onClick={() => CreateNewConversation(user.id_user)} key={index} className="contact-item">
                         <p className="popup-contact-list-icon">{user.icon}</p>
                         <p className="popup-contact-list-name">{user.username}</p>
-                    </a>
+                    </button>
                 ))
             }
         </div>

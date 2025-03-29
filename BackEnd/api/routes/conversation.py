@@ -1,4 +1,5 @@
 import base64
+import datetime
 import logging
 import uuid
 from config import db
@@ -8,7 +9,7 @@ from models import Conversation, Messages, Users
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives.serialization import load_pem_public_key
-from sqlalchemy import desc
+from sqlalchemy import desc, or_, case, func
 from sqlalchemy.orm import aliased
 
 
@@ -25,8 +26,10 @@ async def create_new_conversation(create_conversation : CreateNewConversation):
         db.add(newConversation)
         db.commit()
         logging.info(f"La conversation à bien été créer")
+        return {"succes" : "true"}
     except Exception as e:
         logging.error(f"Erreur lor de la création de la conversation : {e}")
+        return {"succes": "false"}
 
 @router.post("/conversation/addMessage")
 async def add_message_to_conversation(add_to_conv : AddMessageToConversation):
@@ -46,42 +49,68 @@ async def add_message_to_conversation(add_to_conv : AddMessageToConversation):
             id_message = str(uuid.uuid4()),
             id_receiver = add_to_conv.id_receiver,
             content = final_content,
-            sendAt = add_to_conv.sendAt,
+            sendAt = datetime.datetime.now(),
             id_conversation = add_to_conv.id_conversation
         )
         db.add(newMessage)
         db.commit()
+        return {"Message" : "Reussie"}
     except Exception as e :
         logging.error(f" Erreur lors de l'ajout d'un message à une conversation : {e}")
 
+
 @router.get("/conversation/allOfUser")
-async def get_all_conversation_for_user(id_user : str):
-    conversationsData = (
-        db.query(Users.username, Conversation.id_conversation, Users.icon, Messages.sendAt, Messages.content)
-        .join(Messages, Messages.id_conversation == Conversation.id_conversation)
-        .join(Users, Users.id_user == Conversation.id_user1)
-        .filter(Users.id_user == id_user)
-        .order_by(Conversation.id_conversation,
-                  desc(Messages.sendAt))
-        .distinct(Conversation.id_conversation)
+async def get_all_conversation_for_user(id_user: str):
+    user1_alias = aliased(Users, name="user1")
+    user2_alias = aliased(Users, name="user2")
+
+    conversationInfo = (
+        db.query(
+            user1_alias.username.label("user1_name"),
+            user2_alias.username.label("user2_name"),
+            user1_alias.icon.label("user1_icon"),
+            user2_alias.icon.label("user2_icon"),
+            user1_alias.id_user.label("id_user1"),
+            user2_alias.id_user.label("id_user2"),
+            Conversation.id_conversation
+        )
+        .join(user1_alias, user1_alias.id_user == Conversation.id_user1)
+        .join(user2_alias, user2_alias.id_user == Conversation.id_user2)
+        .filter(or_(user1_alias.id_user == id_user, user2_alias.id_user == id_user))
         .all()
     )
-    if conversationsData:
-        logging.info(f"Récupération effectué avec succées pour le User {id_user}")
-        return [{"conversation_id" : conversation.id_conversation, "icon" : conversation.icon, "title" : conversation.username, "lastMessageDate" : conversation.sendAt, "body" : conversation.content} for conversation in conversationsData]
+
+    if conversationInfo:
+        return [
+            {
+                "name": f"{data.user1_name} et {data.user2_name}",
+                "icon": data.user2_icon,
+                "id_user1": data.id_user1,
+                "id_user2": data.id_user2,
+                "id_conversation" : data.id_conversation
+            }
+            for data in conversationInfo
+        ]
     else:
-        logging.error(f"Erreur lors de la récuperération des conversation pour le user {id_user} ")
-        return []
+        return {"error": "Conversation non trouvée"}
+
+
+
 @router.post("/conversation/allMessage")
 async def get_all_message(get_conversaion : GetConversationInfo):
-    messagesData = (db.query(Messages)
-                    .filter(Messages.id_conversation == get_conversaion.id_conversation)
-                    .all())
-    if messagesData:
-        logging.info(f"Messages de la conversation {get_conversaion.id_conversation} récupoeré avec suucées")
-        return [{"content" : message.content, "id_receiver" : message.id_receiver, "sendAt" : message.sendAt} for message in messagesData]
-    else:
-        logging.error(f"Erreur lors de la récupération des messages de la conversation {get_conversaion.id_conversation}")
+    try:
+        messagesData = (db.query(Messages)
+                        .filter(Messages.id_conversation == get_conversaion.id_conversation)
+                        .all())
+        if messagesData:
+            logging.info(f"Messages de la conversation {get_conversaion.id_conversation} récupoeré avec suucées")
+            return [{"empty" : "false" , "content" : message.content, "id_receiver" : message.id_receiver, "sendAt" : message.sendAt} for message in messagesData]
+        else:
+            logging.error(f"Erreur lors de la récupération des messages de la conversation {get_conversaion.id_conversation}")
+            return {"empty": "true"}
+    except Exception as e:
+        logging.error("Erreur lors de la récupération des messages")
+        return {"empty" : "true"}
 
 @router.post("/conversation/info")
 async def get_conversation_info(get_conversation : GetConversationInfo):
@@ -90,6 +119,7 @@ async def get_conversation_info(get_conversation : GetConversationInfo):
     conversationInfo = (db.query(Conversation, user1_alias, user2_alias)
                         .join(user1_alias, user1_alias.id_user == Conversation.id_user1)
                         .join(user2_alias, user2_alias.id_user == Conversation.id_user2)
+                        .join(Messages, Messages.id_conversation == Conversation.id_conversation)
                         .filter(Conversation.id_conversation == get_conversation.id_conversation)
                         .first())
 

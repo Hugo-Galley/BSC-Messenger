@@ -18,7 +18,6 @@ class CreateNewConversation(BaseModel):
 class AddMessageToConversation(BaseModel):
     id_receiver : str
     content : str
-    sendAt : str
     id_conversation : str
 class GetAllConversationForUser(BaseModel):
     id_user : str
