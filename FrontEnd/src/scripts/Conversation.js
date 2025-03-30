@@ -2,7 +2,6 @@ export default async function getConversation(id_conversation){
     let messageList = []
      const storedUser = localStorage.getItem("user")
      const myid = storedUser ? JSON.parse(storedUser).id : ""
-     console.log(id_conversation)
 
      try{
         const response = await fetch("http://localhost:8000/conversation/allMessage", {
@@ -64,6 +63,7 @@ export default async function getConversation(id_conversation){
         if (data.empty === "true"){
             return [[], infoDataFinalze] 
         }
+        messageList.sort((a, b) => new Date(a.sendAt) - new Date(b.sendAt))
         return [messageList,infoDataFinalze]
      }
      catch(error){

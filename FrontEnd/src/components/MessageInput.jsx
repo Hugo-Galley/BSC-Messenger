@@ -7,10 +7,18 @@ export default function MessageInput({conversationId, conversationInfo, onMessag
 
     async function SendMessageInConversation(e){
         e.preventDefault()
-        await SendMessage(message, conversationId,conversationInfo.herId)
-        setMessage("")
-        if (onMessagesent){
-            onMessagesent()
+        if (!conversationInfo || !conversationInfo.herId) {
+            console.error("Information de conversation manquante");
+            return;
+        }
+        const result = await SendMessage(message, conversationId, conversationInfo.herId)
+        if (result) {
+            setMessage("")
+            if (onMessagesent){
+                onMessagesent()
+            }
+        } else {
+            console.error("Erreur lors de l'envoi du message");
         }
     }
 

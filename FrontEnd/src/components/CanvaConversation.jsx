@@ -34,11 +34,10 @@ export default function CanvaConversation({id_conversation}){
                         setConvInfo(infoConv)
                         setConvName(infoConv.name)
                         setConvIcon(infoConv.icon)
-                        console.log(infoConv)
                 }
                 }
             } catch (error) {
-                console.error("Erreur lors de la récuoération des messages : ", error)
+                console.error("Erreur lors de la récupération des messages : ", error)
             }
         }
         fetchData()
@@ -47,7 +46,9 @@ export default function CanvaConversation({id_conversation}){
     
     return(
         <div className="main-container-canva">
-           <div className="headCanvaConversation">
+            { id_conversation !== "" ? (
+                <>
+                <div className="headCanvaConversation">
                 <p className="head-icon">{convIcon}</p>
                 <p className="head-name">{convName}</p>
            </div>
@@ -78,6 +79,15 @@ export default function CanvaConversation({id_conversation}){
                 conversationInfo={convInfo}
                 onMessagesent={handleMessageSent}
            />
+           </>
+           ): (
+            <div className="empty-conversation">
+                <p>Aucune conversation ouverte</p>
+                <p className="empty-hint">Ouvrer une conversation via la sideBar ou crée en grace au bouton</p>
+            </div>
+           )
+            }
+           
         </div>
     );
 }

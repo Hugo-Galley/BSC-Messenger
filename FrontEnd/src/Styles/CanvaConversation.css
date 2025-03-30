@@ -61,7 +61,7 @@
     padding-right: 2vw;
 
 }
-.message-container-received{
+.message-container-received {
     padding: 10px;
     width: 70vw;
     display: flex;
@@ -104,4 +104,7 @@
     margin-top: 10px;
     font-size: 0.9em;
     font-style: italic;
+}
+.message-container-received .message-icon{
+    background: linear-gradient(to right, rgb(204, 229, 255), rgb(153, 204, 255));
 }
