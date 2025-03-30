@@ -1,16 +1,29 @@
-from Function.GetData import LoginUser
-from Function.InsertData import CreateUser
-from config import setupLog, db
-from Class.class_object import User
+import uvicorn
+from config import setupLog
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from routes.users import router
+from routes.conversation import router as conVrouter
 
+setupLog()
+
+app = FastAPI()
+app.include_router(router)
+app.include_router(conVrouter)
+
+authorize_origins = [
+    "http://localhost:5173"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=authorize_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 if __name__ == "__main__":
-    setupLog()
-    try:
-        # user = User("SuperTest","Test")
-        CreateUser(db, "MarioCotillard","Test")
-        # user.CreateKeyPair()
-        #LoginUser(db,"HugoNouveau","Test")
-    finally:
-        db.close()
+    uvicorn.run("main:app", host="localhost", port=8000, reload=True)
+
 

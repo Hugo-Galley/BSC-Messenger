@@ -3,6 +3,7 @@ import logging
 import colorlog
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+import os
 
 def load_config():
     with open("variables.json") as f:
@@ -19,6 +20,7 @@ db = configBdd()
 
 def setupLog():
 
+    os.makedirs("log", exist_ok=True)
     loggger = logging.getLogger()
     loggger.setLevel(logging.DEBUG)
 
@@ -44,6 +46,14 @@ def setupLog():
         "%(asctime)s - %(levelname)s - %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S"
     ))
+    uvicorn_logger = logging.getLogger("uvicorn")
+    uvicorn_logger.propagate = False
+
+    uvicorn_acces_logger = logging.getLogger("uvicorn_acces")
+    uvicorn_acces_logger.setLevel(logging.INFO)
+
+    fastapi_logger = logging.getLogger("fastapi")
+    fastapi_logger.setLevel(logging.INFO)
 
     loggger.addHandler(console_handler)
     loggger.addHandler(file_handler)

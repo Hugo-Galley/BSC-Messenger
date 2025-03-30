@@ -30,7 +30,7 @@ export default async function getConversation(id_conversation){
         }
         const data = await response.json()
         const infoData = await infoResponse.json()
-
+        
         for (let i = 0; i < data.length; i++) {
             const dico = {
                 "content" : data[i].content,
