@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import '../Styles/CanvaConversation.css';
 import MessageBox from './MessageBox';
 import MessageInput from './MessageInput';
@@ -9,16 +9,25 @@ export default function CanvaConversation({id_conversation}){
     const [convInfo, setConvInfo] = useState();
     const [convName, setConvName] = useState("");
     const [convIcon, setConvIcon] = useState("");
+    const bottomConversation = useRef()
     const [refreshTrigger, setRefreshTrigger] = useState(0); 
     
         
     function handleMessageSent(){
         setRefreshTrigger(prev => prev + 1)
     }
+
+    useEffect(() => {
+        if (bottomConversation.current){
+            bottomConversation.current.scrollIntoView({ behavior: 'smooth' })
+        }
+    })
+
     useEffect(() => {
         async function fetchData(){
             try {
                 if (id_conversation){
+                    console.log(id_conversation)
                     const [msgList, infoConv] = await getConversation(id_conversation)
                     if (infoConv !== false){
                         setMessage(msgList)
@@ -61,7 +70,7 @@ export default function CanvaConversation({id_conversation}){
                 </div>
                 )
                 }
-                {}
+                <span ref={bottomConversation}></span>
            </div>
            
            <MessageInput 

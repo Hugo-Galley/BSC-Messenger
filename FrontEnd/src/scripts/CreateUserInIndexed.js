@@ -12,8 +12,14 @@ export default async function generateKeyPair(){
     let exportedPublic = await window.crypto.subtle.exportKey("spki", keyPair.publicKey)
     let exportedPrivate = await window.crypto.subtle.exportKey("pkcs8", keyPair.privateKey)
 
-    let exportedPublicKey =  btoa(String.fromCharCode(...new Uint8Array(exportedPublic)))
-    let exportedPrivateKey =  btoa(String.fromCharCode(...new Uint8Array(exportedPrivate)))
+   
+    function convertToBase64(buffer){
+        let binary = String.fromCharCode(...new Uint8Array(buffer))
+        return btoa(binary)
+    }
+    let exportedPublicKey = `-----BEGIN PUBLIC KEY-----\n${convertToBase64(exportedPublic)}\n-----END PUBLIC KEY-----`;
+    let exportedPrivateKey = `-----BEGIN PRIVATE KEY-----\n${convertToBase64(exportedPrivate)}\n-----END PRIVATE KEY-----`;
+
 
 
     return [exportedPublicKey, exportedPrivateKey];

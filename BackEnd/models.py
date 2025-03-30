@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from sqlalchemy import CHAR, Date, ForeignKeyConstraint, Index, String, Text
+from sqlalchemy import CHAR, Date, DateTime, ForeignKeyConstraint, Index, String, Text
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 import datetime
 
@@ -38,6 +38,7 @@ class Conversation(Base):
     id_conversation: Mapped[str] = mapped_column(CHAR(36), primary_key=True)
     id_user1: Mapped[str] = mapped_column(CHAR(36))
     id_user2: Mapped[str] = mapped_column(CHAR(36))
+    CreateAt: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
 
     Users_: Mapped['Users'] = relationship('Users', foreign_keys=[id_user1], back_populates='Conversation')
     Users1: Mapped['Users'] = relationship('Users', foreign_keys=[id_user2], back_populates='Conversation_')

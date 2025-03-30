@@ -21,12 +21,16 @@ async def create_new_conversation(create_conversation : CreateNewConversation):
         newConversation = Conversation(
             id_conversation = str(uuid.uuid4()),
             id_user1 = create_conversation.id_user1,
-            id_user2 = create_conversation.id_user2
+            id_user2 = create_conversation.id_user2,
+            CreateAt = datetime.datetime.now()
         )
         db.add(newConversation)
         db.commit()
+        conversationId = (db.query(Conversation)
+                          .order_by(desc(Conversation.CreateAt))
+                          .first())
         logging.info(f"La conversation à bien été créer")
-        return {"succes" : "true"}
+        return {"succes" : "true", "id_conversation" : conversationId.id_conversation}
     except Exception as e:
         logging.error(f"Erreur lor de la création de la conversation : {e}")
         return {"succes": "false"}
@@ -116,15 +120,30 @@ async def get_all_message(get_conversaion : GetConversationInfo):
 async def get_conversation_info(get_conversation : GetConversationInfo):
     user1_alias = aliased(Users, name="user1")
     user2_alias = aliased(Users, name="user2")
-    conversationInfo = (db.query(Conversation, user1_alias, user2_alias)
-                        .join(user1_alias, user1_alias.id_user == Conversation.id_user1)
-                        .join(user2_alias, user2_alias.id_user == Conversation.id_user2)
-                        .join(Messages, Messages.id_conversation == Conversation.id_conversation)
-                        .filter(Conversation.id_conversation == get_conversation.id_conversation)
-                        .first())
+
+    conversationInfo = (
+        db.query(
+            user1_alias.username.label("user1_name"),
+            user2_alias.username.label("user2_name"),
+            user1_alias.icon.label("user1_icon"),
+            user2_alias.icon.label("user2_icon"),
+            user1_alias.id_user.label("id_user1"),
+            user2_alias.id_user.label("id_user2"),
+            Conversation.id_conversation
+        )
+        .join(user1_alias, user1_alias.id_user == Conversation.id_user1)
+        .join(user2_alias, user2_alias.id_user == Conversation.id_user2)
+        .filter(Conversation.id_conversation == get_conversation.id_conversation)
+        .first()
+    )
 
     if conversationInfo:
-        return {"name" : f"{conversationInfo[1].username} et {conversationInfo[2].username}","icon" : conversationInfo[1].icon, "id_user1" : conversationInfo[1].id_user , "id_user2" : conversationInfo[2].id_user}
+        return {
+                "name": f"{conversationInfo.user1_name} et {conversationInfo.user2_name}",
+                "icon": conversationInfo.user2_icon,
+                "id_user1": conversationInfo.id_user1,
+                "id_user2": conversationInfo.id_user2,
+                "id_conversation": conversationInfo.id_conversation
+            }
     else:
-        return {"Error" : "Conversation non trouvé"}
-
+        return {"error": "Conversation non trouvée"}

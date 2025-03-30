@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import getInformations from '../scripts/GetInformations';
 import { CreateConversation } from '../scripts/Conversation';
 
-export default function PopUpNewConversation({ onClose }){
+export default function PopUpNewConversation({ onClose, idNewConversation }){
     const [listOfUSer, setListOfUser] = useState([])
     const [sortList, setSortList] = useState([])
     function sortUser(event, users){
@@ -23,7 +23,10 @@ export default function PopUpNewConversation({ onClose }){
         fetchUsers()
     }, [])
     async function CreateNewConversation(id_user){
-        CreateConversation(id_user)
+        const idConversation = await CreateConversation(id_user)
+        idNewConversation(idConversation)
+        
+
     }
     return(
             <div className="popup-body">
@@ -40,7 +43,7 @@ export default function PopUpNewConversation({ onClose }){
             <p className="popup-contact-list-title">Suggestions</p>
             {
                 sortList.map((user,index) =>(
-                    <button onClick={() => CreateNewConversation(user.id_user)} key={index} className="contact-item">
+                    <button onClick={() => {CreateNewConversation(user.id_user); onClose();}} key={index} className="contact-item">
                         <p className="popup-contact-list-icon">{user.icon}</p>
                         <p className="popup-contact-list-name">{user.username}</p>
                     </button>

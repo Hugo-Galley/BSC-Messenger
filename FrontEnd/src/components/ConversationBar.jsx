@@ -12,26 +12,31 @@ export default function ConversationBar({ userData, onLogout, onsSelectedConvers
 
     function sortConversation(event, conversations) {
         setSortList(listOfConversation);
-        setSortList(conversations.filter(conversation => conversation.title.toLowerCase().includes(event.target.value.toLowerCase())));
+        setSortList(conversations.filter(conversation => conversation.name.toLowerCase().includes(event.target.value.toLowerCase())));
     }
 
-    useEffect(() => {
-        async function fetchConversations() {            
-            try {
-                const conversations = await getInformations(`http://localhost:8000/conversation/allOfUser?id_user=${userData.id}`);
-                const conversationTableau = Array.isArray(conversations) ? conversations : []
-                if (conversationTableau === "empty" || !conversations || conversations.length === 0) {
-                    setIsempty(true)
-                } else {
-                    setIsempty(false)
-                }
-                setListOfConversation(conversationTableau);
-                setSortList(conversationTableau);
-
-            } catch (error) {
-                console.error("Erreur lors de la récupération des utilisateurs:", error);
+    function handleNewConversation(conversationId){
+        onsSelectedConversations(conversationId)
+        fetchConversations();
+    }
+    async function fetchConversations() {            
+        try {
+            const conversations = await getInformations(`http://localhost:8000/conversation/allOfUser?id_user=${userData.id}`);
+            const conversationTableau = Array.isArray(conversations) ? conversations : []
+            if (conversationTableau === "empty" || !conversations || conversations.length === 0) {
+                setIsempty(true)
+            } else {
+                setIsempty(false)
             }
+            setListOfConversation(conversationTableau);
+            setSortList(conversationTableau);
+
+        } catch (error) {
+            console.error("Erreur lors de la récupération des utilisateurs:", error);
         }
+    }
+    useEffect(() => {
+
         fetchConversations();
     }, [userData]);
 
@@ -66,7 +71,10 @@ export default function ConversationBar({ userData, onLogout, onsSelectedConvers
             {showPopUp && (
                 <div className="overlay">
                     <div className="popup-new-conversation">
-                        <PopUpNewConversation onClose={() => setShowPopUp(false)} />
+                        <PopUpNewConversation
+                         onClose={() => setShowPopUp(false)} 
+                         idNewConversation={handleNewConversation}
+                         />
                     </div>
                 </div>
             )}
