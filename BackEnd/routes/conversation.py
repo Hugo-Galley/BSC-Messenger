@@ -110,7 +110,7 @@ async def get_all_message(get_conversaion : GetConversationInfo):
                         .all())
         if messagesData:
             logging.info(f"Messages de la conversation {get_conversaion.id_conversation} récupoeré avec suucées")
-            return [{"empty" : "false" , "content" : message.content, "id_receiver" : message.id_receiver, "sendAt" : message.sendAt} for message in messagesData]
+            return [{"empty" : "false" , "content" : message.content, "id_receiver" : message.id_receiver, "sendAt" : message.sendAt, "id_message" : message.id_message} for message in messagesData]
         else:
             logging.error(f"Erreur lors de la récupération des messages de la conversation {get_conversaion.id_conversation}")
             return {"empty": "true"}
