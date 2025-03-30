@@ -182,6 +182,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-variables.json
+# variables.json
 *.pem
 test.py
