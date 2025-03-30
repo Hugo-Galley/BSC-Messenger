@@ -1,6 +1,7 @@
 import { useState} from "react";
 import '../Styles/MessageInput.css';
 import SendMessage from "../scripts/SendMessage";
+import { CreateMessageInIndexed } from "../scripts/SendMessage";
 
 export default function MessageInput({conversationId, conversationInfo, onMessagesent}) {
     const [message, setMessage] = useState(''); 
@@ -12,7 +13,8 @@ export default function MessageInput({conversationId, conversationInfo, onMessag
             return;
         }
         const result = await SendMessage(message, conversationId, conversationInfo.herId)
-        if (result) {
+        if (result !== "") {
+            CreateMessageInIndexed(conversationInfo.herId,message,result)
             setMessage("")
             if (onMessagesent){
                 onMessagesent()

@@ -18,9 +18,66 @@ export default async function SendMessage(content, id_conversation, id_receiver)
         if (!response.ok){
             return false
         }
-        return true
+        const data = await response.json()
+
+        if (data.succes === "true"){
+            return data.id_message
+        }
+        else{
+            console.error("Reponse invalide de l'API")
+            return ""
+        }
+       
     } catch (error) {
         console.log("Erreur lors de l'envoie du message ", error)
         return false
     }
 }
+export async function CreateMessageInIndexed(receiver,content,id_message){
+
+    return new Promise((resolve, reject) => {
+        let request = indexedDB.open("UserDB", 2);
+
+        request.onupgradeneeded = function(event) {
+            let db = event.target.result
+            if(!db.objectStoreNames.contains("Conversation")){
+                db.createObjectStore("Conversation", { keyPath: "id_message" });
+            }
+        };
+            request.onerror = function(event) {
+                console.error("Erreur lors de l'ouverture de la base de données", event.target.error);
+                reject(event.target.error) 
+            };
+    
+            request.onsuccess = function(event) {
+                let db = event.target.result;
+                try {
+                    let message = {
+                        id_message : id_message,
+                        receiver : receiver,
+                        content : content,
+                        timestamp : Date.now()
+                    }
+    
+                    let transaction = db.transaction("Conversation", "readwrite");
+                    let store = transaction.objectStore("Conversation");
+                    let addRequest = store.add(message);
+    
+                    addRequest.onsuccess = function() {
+                        console.log("Message ajouté avec succès !");
+                        return true
+                    };
+                    
+                    addRequest.onerror = function(event) {
+                        console.error("Erreur lors de l'ajout du message:", event.target.error);
+                        return false
+                    };
+    
+                } catch (error) {
+                    console.error("Une erreur est survenu ", error)
+                }
+            }
+    })
+    
+    }
+
