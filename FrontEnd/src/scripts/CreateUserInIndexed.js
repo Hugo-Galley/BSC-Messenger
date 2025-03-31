@@ -30,7 +30,7 @@ export async function CreateUserInIndexeed(username) {
     const [publicKey, privateKey] = await generateKeyPair();
     
     return new Promise((resolve, reject) => {
-        let request = indexedDB.open("UserDB", 1);
+        let request = indexedDB.open("UserDB", 2);
         
         request.onupgradeneeded = function(event) {
             let db = event.target.result;

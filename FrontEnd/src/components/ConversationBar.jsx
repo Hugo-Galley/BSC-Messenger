@@ -2,7 +2,7 @@ import ConversationCard from "./ConversationCard";
 import '../Styles/ConversationBar.css'
 import { useState, useEffect } from 'react';
 import PopUpNewConversation from "./PopUpNewConversation";
-import getInformations from "../scripts/GetInformations";
+import {GetConversationsBar} from "../scripts/GetInformations";
 
 export default function ConversationBar({ userData, onLogout, onsSelectedConversations, activeConversationId }) {
     const [showPopUp, setShowPopUp] = useState(false);
@@ -21,7 +21,7 @@ export default function ConversationBar({ userData, onLogout, onsSelectedConvers
     }
     async function fetchConversations() {            
         try {
-            const conversations = await getInformations(`http://localhost:8000/conversation/allOfUser?id_user=${userData.id}`);
+            const conversations = await GetConversationsBar(`http://localhost:8000/conversation/allOfUser?id_user=${userData.id}`);
             const conversationTableau = Array.isArray(conversations) ? conversations : []
             if (conversationTableau === "empty" || !conversations || conversations.length === 0) {
                 setIsempty(true)

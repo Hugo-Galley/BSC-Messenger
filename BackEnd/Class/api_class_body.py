@@ -5,6 +5,9 @@ class AuthRequest(BaseModel):
     password : str
 class GetUserRequest(BaseModel):
     username : str
+
+class GetAllOfUser(BaseModel):
+    myId : str
 class RegisterUser(BaseModel):
     username : str
     password : str

@@ -1,12 +1,12 @@
 import logging
 from models import Users
-from Class.class_object import User
 from fastapi import APIRouter
 from config import db
 import uuid
 from cryptography.hazmat.primitives import hashes
 import base64
-from Class.api_class_body import AuthRequest, GetUserRequest, RegisterUser
+from Class.api_class_body import AuthRequest, GetUserRequest, RegisterUser, GetAllOfUser
+import os
 
 
 router = APIRouter()
@@ -43,13 +43,16 @@ async def post_user(auth_data : RegisterUser):
         ifExistsUserData = db.query(Users).filter(Users.username == auth_data.username).first()
         if ifExistsUserData:
             return {"Message" : "Un utilisateur existe déja avec se nom d'utilisateur", "exists" : "true"}
-        user = User(auth_data.username,auth_data.password)
-        user.HashAndSaltPassword()
+        salt = base64.b64encode(os.urandom(16)).decode('utf-8')
+        password = auth_data.password + salt
+        digest = hashes.Hash(hashes.SHA256())
+        digest.update(password.encode())
+        password = base64.b64encode(digest.finalize()).decode('utf-8')
         newUser = Users(id_user=str(uuid.uuid4()),
-                               username=user.username,
-                               password=user.password,
+                               username=auth_data.username,
+                               password=password,
                                public_key=auth_data.publicKey,
-                               salt=user.salt,
+                               salt=salt,
                                icon=auth_data.icon)
         db.add(newUser)
         db.commit()
@@ -58,7 +61,10 @@ async def post_user(auth_data : RegisterUser):
         logging.error(f"Erreur : {e}")
         return {"Message" : "Erreur lor de la création du User", "exists" : "false"}
 
-@router.get("/users/all")
-async def get_all_user():
-    usersData = db.query(Users).with_entities(Users.id_user, Users.username, Users.icon).all()
+@router.post("/users/all")
+async def get_all_user(get_user : GetAllOfUser):
+    usersData = (db.query(Users)
+                 .with_entities(Users.id_user, Users.username, Users.icon)
+                 .filter(Users.id_user != get_user.myId)
+                 .all())
     return [{"id_user" : user[0], "username" : user[1], "icon" : user[2]} for user in usersData]
