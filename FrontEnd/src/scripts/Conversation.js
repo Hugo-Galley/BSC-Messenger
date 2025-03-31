@@ -103,6 +103,10 @@ export async function CreateConversation(id_user){
 
 }
 async function GetFinalMessageList(messageList){
+    
+    const storedUser = localStorage.getItem("user")
+    const myid = storedUser ? JSON.parse(storedUser).id : ""
+
     return new Promise((resolve,reject) => {
         let request = indexedDB.open("UserDB", 2);
 
@@ -122,13 +126,14 @@ async function GetFinalMessageList(messageList){
                 resolve(messageList)
                 return
             }
-            
+
+                        
             for (let i = 0; i < messageList.length; i++) {
                 const id_message = messageList[i].id_message;
                 console.log("L'id du message est ",id_message)
                 let getRequest = store.get(id_message)
                 getRequest.onsuccess = function(){
-                    if(getRequest.result){
+                    if(getRequest.result && getRequest.result.sender === myid){
                         console.log("Le contenu est ",getRequest.result.content)
                         messageList[i].content = getRequest.result.content
                         console.log("le contenu de messagelist[i] est ",messageList[i].content)

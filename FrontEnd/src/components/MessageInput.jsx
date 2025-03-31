@@ -14,7 +14,7 @@ export default function MessageInput({conversationId, conversationInfo, onMessag
         }
         const result = await SendMessage(message, conversationId, conversationInfo.herId)
         if (result !== "") {
-            CreateMessageInIndexed(conversationInfo.herId,message,result)
+            await CreateMessageInIndexed(conversationInfo.herId,message,result)
             setMessage("")
             if (onMessagesent){
                 onMessagesent()

@@ -34,6 +34,9 @@ export default async function SendMessage(content, id_conversation, id_receiver)
     }
 }
 export async function CreateMessageInIndexed(receiver,content,id_message){
+
+    const storedUser = localStorage.getItem("user")
+    const myid = storedUser ? JSON.parse(storedUser).id : ""
     
     return new Promise((resolve, reject) => {        
         let request = indexedDB.open("UserDB", 2);
@@ -57,9 +60,10 @@ export async function CreateMessageInIndexed(receiver,content,id_message){
                         reject(new Error("Le magasin d'objets 'Conversation' n'existe pas"));
                         return;
                     }
+                    console.log("le contenu est ", content)
                     let message = {
                         id_message : id_message,
-                        receiver : receiver,
+                        sender : myid,
                         content : content,
                         timestamp : Date.now()
                     }
