@@ -25,3 +25,7 @@ class GetAllConversationForUser(BaseModel):
 
 class GetConversationInfo(BaseModel):
     id_conversation : str
+class GetMessageOfConversation(BaseModel):
+    id_conversation : str
+    myId : str
+    lastMessageDate : str

@@ -1,7 +1,7 @@
 import '../Styles/PopupNewConversation.css'
 import { useState, useEffect } from "react";
 import getInformations from '../scripts/GetInformations';
-import { CreateConversation } from '../scripts/Conversation';
+import CreateConversation from '../scripts/Conversation';
 
 export default function PopUpNewConversation({ onClose, idNewConversation }){
     const [listOfUSer, setListOfUser] = useState([])

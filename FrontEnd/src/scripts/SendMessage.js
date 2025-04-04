@@ -1,6 +1,4 @@
 export default async function SendMessage(content, id_conversation, id_receiver){
-    const date = new Date()
-    const sendAt = date.toISOString().split('T')[0]
     try {
         console.log("L'id récupére lors de l'envoie du message est ", id_conversation, content, id_receiver)
         const response = await fetch("http://localhost:8000/conversation/addMessage",{
@@ -11,7 +9,6 @@ export default async function SendMessage(content, id_conversation, id_receiver)
             body : JSON.stringify({
                 id_receiver : id_receiver,
                 content : content,
-                sendAt : sendAt,
                 id_conversation : id_conversation
             })
         })
@@ -33,13 +30,10 @@ export default async function SendMessage(content, id_conversation, id_receiver)
         return false
     }
 }
-export async function CreateMessageInIndexed(receiver,content,id_message){
-
-    const storedUser = localStorage.getItem("user")
-    const myid = storedUser ? JSON.parse(storedUser).id : ""
-    
+export async function CreateMessageInIndexed(receiver,content,id_message,id_conversation){
+    const sendAt = new Date().toISOString().split('.')[0].replace('T', ' ');
     return new Promise((resolve, reject) => {        
-        let request = indexedDB.open("UserDB", 2);
+        let request = indexedDB.open("UserDB", 1);
 
         request.onupgradeneeded = function(event) {
             let db = event.target.result
@@ -60,12 +54,13 @@ export async function CreateMessageInIndexed(receiver,content,id_message){
                         reject(new Error("Le magasin d'objets 'Conversation' n'existe pas"));
                         return;
                     }
-                    console.log("le contenu est ", content)
                     let message = {
                         id_message : id_message,
-                        sender : myid,
+                        receiver : receiver,
                         content : content,
-                        timestamp : Date.now()
+                        datetime : sendAt,
+                        id_conversation : id_conversation,
+                        type : ""
                     }
     
                     let transaction = db.transaction("Conversation", "readwrite");

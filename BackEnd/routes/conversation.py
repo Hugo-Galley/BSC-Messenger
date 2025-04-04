@@ -1,15 +1,16 @@
+import asyncio
 import base64
 import datetime
 import logging
 import uuid
 from config import db
 from fastapi import APIRouter
-from Class.api_class_body import CreateNewConversation, AddMessageToConversation, GetConversationInfo
+from Class.api_class_body import CreateNewConversation, AddMessageToConversation, GetConversationInfo, GetMessageOfConversation
 from models import Conversation, Messages, Users
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives.serialization import load_pem_public_key
-from sqlalchemy import desc, or_
+from sqlalchemy import desc, or_, func
 from sqlalchemy.orm import aliased
 
 
@@ -103,20 +104,33 @@ async def get_all_conversation_for_user(id_user: str):
 
 
 @router.post("/conversation/allMessage")
-async def get_all_message(get_conversaion : GetConversationInfo):
-    try:
-        messagesData = (db.query(Messages)
-                        .filter(Messages.id_conversation == get_conversaion.id_conversation)
-                        .all())
-        if messagesData:
-            logging.info(f"Messages de la conversation {get_conversaion.id_conversation} récupoeré avec suucées")
-            return [{"empty" : "false" , "content" : message.content, "id_receiver" : message.id_receiver, "sendAt" : message.sendAt, "id_message" : message.id_message} for message in messagesData]
-        else:
-            logging.error(f"Erreur lors de la récupération des messages de la conversation {get_conversaion.id_conversation}")
-            return {"empty": "true"}
-    except Exception as e:
-        logging.error("Erreur lors de la récupération des messages")
-        return {"empty" : "true"}
+async def get_all_message(get_message : GetMessageOfConversation):
+    if isinstance(get_message.lastMessageDate, str):
+        get_message.lastMessageDate = datetime.datetime.strptime(get_message.lastMessageDate, "%Y-%m-%d %H:%M:%S")
+
+    timeout = 30
+    pollingInterval = 1
+    startTime = datetime.datetime.utcnow()
+
+    while (datetime.datetime.utcnow() - startTime).total_seconds() < timeout:
+        messageList = (db.query(Messages)
+         .filter(Messages.id_receiver == get_message.myId,
+                 Messages.id_conversation == get_message.id_conversation,
+                Messages.sendAt > get_message.lastMessageDate)
+         .all())
+
+        if messageList:
+            return [
+                {
+                    "id_message" : message.id_message,
+                    "id_conversation" : message.id_conversation,
+                    "content" : message.content,
+                    "sendAt" : message.sendAt,
+                    "id_receiver" : message.id_receiver
+                }
+            for message in messageList]
+        await asyncio.sleep(pollingInterval)
+    return []
 
 @router.post("/conversation/info")
 async def get_conversation_info(get_conversation : GetConversationInfo):

@@ -1,82 +1,4 @@
-export default async function getConversation(id_conversation){
-    let messageList = []
-     const storedUser = localStorage.getItem("user")
-     const myid = storedUser ? JSON.parse(storedUser).id : ""
-
-     try{
-        const response = await fetch("http://localhost:8000/conversation/allMessage", {
-            method : 'POST',
-            headers : {
-                'Content-Type' : 'application/json'
-            },
-            body : JSON.stringify({
-                id_conversation
-            }),
-        })
-        if (!response.ok){
-            return [false,false]
-        }
-        const infoResponse = await fetch("http://localhost:8000/conversation/info", {
-            method : 'POST',
-            headers : {
-                'Content-Type' : 'application/json'
-            },
-            'body' : JSON.stringify({
-                id_conversation
-            })
-        })
-        if (!infoResponse.ok){
-            return [false,false]
-        }
-        const data = await response.json()
-        const infoData = await infoResponse.json()
-        
-        for (let i = 0; i < data.length; i++) {
-            const dico = {
-                "content" : data[i].content,
-                "sendAt" : data[i].sendAt,
-                "type" : "",
-                "icon" : data[i].icon,
-                "id_message" : data[i].id_message
-            }
-            if (data[i].id_receiver === myid){
-                dico.type = "received"
-            }
-            else{
-                dico.type = "sent"
-            }
-            messageList.push(dico)
-        }
-        const infoDataFinalze = {
-            "name" : infoData.name,
-            "icon" : infoData.icon,
-            "myId" : myid,
-            "herId" : "",
-            "id_message" : data.id_message
-        }
-        if (infoData.id_user1 === myid){
-            infoDataFinalze.herId = infoData.id_user2
-        }
-        else{
-            infoDataFinalze.herId = infoData.id_user1
-        }
-        console.log(data)
-        console.log(infoData)
-        if (data.empty === "true"){
-            return [[], infoDataFinalze] 
-        }
-        messageList.sort((a, b) => new Date(a.sendAt) - new Date(b.sendAt))
-        const finalList = await GetFinalMessageList(messageList)
-        console.log("la liste de message est ",finalList)
-        return [finalList,infoDataFinalze]
-     }
-     catch(error){
-        console.error("Erreur lors de la recupérations des conversations: ", error)
-        return [false, false]
-     }
-}
-
-export async function CreateConversation(id_user){
+export default async function CreateConversation(id_user){
     const storedUser = localStorage.getItem("user")
     const myid = storedUser ? JSON.parse(storedUser).id : ""
 
@@ -94,6 +16,7 @@ export async function CreateConversation(id_user){
         console.error("Erreur lors de la création d'une conversation")
     }
     const data = await response.json()
+    
     if (data.succes === "true"){
         return data.id_conversation
     }
@@ -102,64 +25,106 @@ export async function CreateConversation(id_user){
     }
 
 }
-async function GetFinalMessageList(messageList){
-    
+
+export async function GetConversationInfo(id_conversation){
     const storedUser = localStorage.getItem("user")
     const myid = storedUser ? JSON.parse(storedUser).id : ""
 
-    return new Promise((resolve,reject) => {
-        let request = indexedDB.open("UserDB", 2);
+    const response = await fetch("http://localhost:8000/conversation/info", {
+        method : 'POST',
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify({
+            id_conversation : id_conversation
+        })
+    })
+    if (!response.ok){
+        return false
+    }
+    const data = await response.json()
+    if(data){
+        let dico =  {
+            "name" : data.name,
+            "icon" : data.icon,
+            "myId" : myid,
+            "herId" : "",
+            "id_conversation" : data.id_conversation
+        }
+        if (data.id_user1 === myid){
+            dico.herId = data.id_user2
+        }
+        else{
+            dico.herId = data.id_user1
+        }
+        return dico
+    }
+}
+export async function GetInternMessageList(id_conversation){
+    const storedUser = localStorage.getItem("user")
+    const myid = storedUser ? JSON.parse(storedUser).id : ""
+    let msgList = [];
 
-        request.onerror = function(event) {
-            console.error("Erreur lors de l'ouverture de la base de données", event.target.error);
-            reject(event.target.error);
+    indexedDB.deleteDatabase("UserDb")
+    return new Promise((resolve, reject) => {
+        let request = indexedDB.open("UserDB", 1);
+
+        request.onerror = function(event){
+            console.error("Erreur lors de l'ouverture de la base de données ", event.target.error);
+            reject([]);
+        };
+
+        request.onupgradeneeded = function(event) {
+            let db = event.target.result;
+            if (!db.objectStoreNames.contains("Conversation")) {
+                db.createObjectStore("Conversation", { keyPath: "id_message" });
+                console.log("Le magasin d'objets 'Conversation' a été créé.");
+            } else {
+                console.log("Le magasin d'objets 'Conversation' existe déjà.");
+            }
         };
 
         request.onsuccess = function(event){
             let db = event.target.result
-            let transaction = db.transaction("Conversation","readonly")
-            let store = transaction.objectStore("Conversation")
-
-            let completeOperations = 0;
-
-            if (messageList.length === 0){
-                resolve(messageList)
-                return
+            if (!db.objectStoreNames.contains("Conversation")) {
+                console.error("Le magasin d'objets 'Conversation' n'existe pas.");
+                resolve([]); 
+                return;
             }
+            try{
+                let transaction = db.transaction("Conversation", "readwrite");
+                let store = transaction.objectStore("Conversation");
+                let requestMessageList = store.getAll()
 
-                        
-            for (let i = 0; i < messageList.length; i++) {
-                const id_message = messageList[i].id_message;
-                console.log("L'id du message est ",id_message)
-                let getRequest = store.get(id_message)
-                getRequest.onsuccess = function(){
-                    if(getRequest.result && getRequest.result.sender === myid){
-                        console.log("Le contenu est ",getRequest.result.content)
-                        messageList[i].content = getRequest.result.content
-                        console.log("le contenu de messagelist[i] est ",messageList[i].content)
-                    }
-                    else{
-                        console.log("Message non trouvé")
-                    }
-                    completeOperations++
-                    if (completeOperations === messageList.length){
-                        resolve(messageList)
-                    }
-
+                requestMessageList.onerror = function(event){
+                    console.error("Erreur lors de la récupération de la liste de message ",event.target.error)
+                    reject([])
                 }
-                getRequest.onerror = function(event) {
-                    console.error("Erreur lors de la recherche de clé", event.target.error);
-                    completeOperations++
-                    if (completeOperations === messageList.length){
-                        resolve(messageList)
+                requestMessageList.onsuccess = function(event){
+                    let result = event.target.result
+                    console.log("L'id ")
+                    for (let i = 0; i < result.length; i++) {
+                        if(result[i].id_conversation === id_conversation){
+                            if(result[i].receiver === myid){
+                                result[i].type = "received"
+                            }
+                            else{
+                                result[i].type = "sent"
+                            }
+                            msgList.push(result[i])
+                        }
                     }
-
-                };
+                    msgList.sort((a,b) => new Date(a.datetime) - new Date(b.datetime))
+                    resolve(msgList)
+                }
                 
             }
-            transaction.oncomplete = function(){
-                db.close()
+            catch(error){
+                console.error("Erreur lors de la récupération des messages", error)
+                reject([])
             }
         }
     })
 }
+
+

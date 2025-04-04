@@ -9,12 +9,13 @@ export default function MessageInput({conversationId, conversationInfo, onMessag
     async function SendMessageInConversation(e){
         e.preventDefault()
         if (!conversationInfo || !conversationInfo.herId) {
+            console.log("la valeur de conversationInfo est ",conversationInfo)
             console.error("Information de conversation manquante");
             return;
         }
         const result = await SendMessage(message, conversationId, conversationInfo.herId)
         if (result !== "") {
-            await CreateMessageInIndexed(conversationInfo.herId,message,result)
+            await CreateMessageInIndexed(conversationInfo.herId,message,result,conversationId,"sent")
             setMessage("")
             if (onMessagesent){
                 onMessagesent()

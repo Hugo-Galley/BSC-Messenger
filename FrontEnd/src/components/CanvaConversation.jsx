@@ -2,7 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import '../Styles/CanvaConversation.css';
 import MessageBox from './MessageBox';
 import MessageInput from './MessageInput';
-import getConversation from '../scripts/Conversation';
+import { GetConversationInfo, GetInternMessageList } from '../scripts/Conversation';
+
 
 export default function CanvaConversation({id_conversation}){
     const [message, setMessage] = useState([]);
@@ -28,12 +29,18 @@ export default function CanvaConversation({id_conversation}){
             try {
                 if (id_conversation){
                     console.log(id_conversation)
-                    const [msgList, infoConv] = await getConversation(id_conversation)
+                    const infoConv = await GetConversationInfo(id_conversation)
                     if (infoConv !== false){
-                        setMessage(msgList)
                         setConvInfo(infoConv)
                         setConvName(infoConv.name)
                         setConvIcon(infoConv.icon)
+                        const messages = await GetInternMessageList(id_conversation)
+                        if(messages.length !== 0){
+                            setMessage(messages)
+                        }
+                        else{
+                            setMessage([])
+                        }
                 }
                 }
             } catch (error) {
@@ -41,6 +48,7 @@ export default function CanvaConversation({id_conversation}){
             }
         }
         fetchData()
+        
     }, [id_conversation, refreshTrigger])
 
     
