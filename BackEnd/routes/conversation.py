@@ -106,7 +106,10 @@ async def get_all_conversation_for_user(id_user: str):
 @router.post("/conversation/allMessage")
 async def get_all_message(get_message : GetMessageOfConversation):
     if isinstance(get_message.lastMessageDate, str):
-        get_message.lastMessageDate = datetime.datetime.strptime(get_message.lastMessageDate, "%Y-%m-%d %H:%M:%S")
+        try :
+            get_message.lastMessageDate = datetime.datetime.fromisoformat(get_message.lastMessageDate)
+        except ValueError:
+            get_message.lastMessageDate = datetime.datetime.strptime(get_message.lastMessageDate, "%Y-%m-%d %H:%M:%S")
 
     timeout = 30
     pollingInterval = 1
@@ -114,8 +117,9 @@ async def get_all_message(get_message : GetMessageOfConversation):
 
     while (datetime.datetime.utcnow() - startTime).total_seconds() < timeout:
         messageList = (db.query(Messages)
-         .filter(Messages.id_receiver == get_message.myId,
-                 Messages.id_conversation == get_message.id_conversation,
+         .filter(
+                Messages.id_receiver == get_message.myId,
+                Messages.id_conversation == get_message.id_conversation,
                 Messages.sendAt > get_message.lastMessageDate)
          .all())
 

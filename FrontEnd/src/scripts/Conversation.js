@@ -64,8 +64,6 @@ export async function GetInternMessageList(id_conversation){
     const storedUser = localStorage.getItem("user")
     const myid = storedUser ? JSON.parse(storedUser).id : ""
     let msgList = [];
-
-    indexedDB.deleteDatabase("UserDb")
     return new Promise((resolve, reject) => {
         let request = indexedDB.open("UserDB", 1);
 
@@ -86,11 +84,6 @@ export async function GetInternMessageList(id_conversation){
 
         request.onsuccess = function(event){
             let db = event.target.result
-            if (!db.objectStoreNames.contains("Conversation")) {
-                console.error("Le magasin d'objets 'Conversation' n'existe pas.");
-                resolve([]); 
-                return;
-            }
             try{
                 let transaction = db.transaction("Conversation", "readwrite");
                 let store = transaction.objectStore("Conversation");
@@ -102,7 +95,6 @@ export async function GetInternMessageList(id_conversation){
                 }
                 requestMessageList.onsuccess = function(event){
                     let result = event.target.result
-                    console.log("L'id ")
                     for (let i = 0; i < result.length; i++) {
                         if(result[i].id_conversation === id_conversation){
                             if(result[i].receiver === myid){
@@ -126,5 +118,4 @@ export async function GetInternMessageList(id_conversation){
         }
     })
 }
-
 

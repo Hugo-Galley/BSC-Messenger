@@ -2,7 +2,7 @@
 .messageBox {
     display: flex;
     flex-direction: row;
-    max-width: 55%;
+    max-width: 55vw;
     padding: 10px 15px;
     position: relative;
     margin-bottom: 8px;

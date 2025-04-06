@@ -3,6 +3,7 @@ import '../Styles/CanvaConversation.css';
 import MessageBox from './MessageBox';
 import MessageInput from './MessageInput';
 import { GetConversationInfo, GetInternMessageList } from '../scripts/Conversation';
+import LongPollingrequest from '../scripts/LongPollingRequest';
 
 
 export default function CanvaConversation({id_conversation}){
@@ -25,22 +26,28 @@ export default function CanvaConversation({id_conversation}){
     })
 
     useEffect(() => {
+        let isActive = true
         async function fetchData(){
             try {
                 if (id_conversation){
-                    console.log(id_conversation)
                     const infoConv = await GetConversationInfo(id_conversation)
                     if (infoConv !== false){
                         setConvInfo(infoConv)
                         setConvName(infoConv.name)
                         setConvIcon(infoConv.icon)
                         const messages = await GetInternMessageList(id_conversation)
-                        if(messages.length !== 0){
-                            setMessage(messages)
-                        }
-                        else{
-                            setMessage([])
-                        }
+                        setMessage(messages)
+                        const lastDate = messages.length > 0 ? messages[messages.length -1].datetime : new Date().toISOString()
+                        await LongPollingrequest(
+                            id_conversation,
+                            infoConv.myId,
+                            lastDate,
+                            setMessage,
+                            isActive
+                        )
+
+                        
+                            
                 }
                 }
             } catch (error) {
@@ -48,7 +55,11 @@ export default function CanvaConversation({id_conversation}){
             }
         }
         fetchData()
-        
+
+        return () => {
+            isActive = false
+        }
+
     }, [id_conversation, refreshTrigger])
 
     
