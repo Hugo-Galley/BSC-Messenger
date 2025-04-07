@@ -52,12 +52,13 @@ export default function RegisterForm({ onSwitchToLogin, onRegisterSuccess }) {
                     </div>
 
                         <div className='form-group'>
-                            <label htmlFor='icon'>Entrer votre Icon</label>
+                            <label htmlFor='icon'>Entrer votre Icon (max 2 caractères)</label>
                             <input
                                 type='text'
                                 id='icon'
                                 value={icon}
-                                onChange={(e) => setIcon(e.target.value)}
+                                onChange={(e) => setIcon(e.target.value.slice(0, 2))}
+                                maxLength={2}
                                 required
                             />
                         </div>

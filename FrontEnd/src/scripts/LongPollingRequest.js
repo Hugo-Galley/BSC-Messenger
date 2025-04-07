@@ -27,7 +27,6 @@ export default async function LongPollingrequest(id_conversation,myId,lastMessag
                 for (let message of data){
                     try{
                         const decryptContent = await DecryptMessage(message.content)
-                        console.log("Le message est , ",decryptContent)
                         await CreateMessageInIndexed(message.id_receiver,decryptContent, message.id_message,message.id_conversation )
                     }
                     catch(error){

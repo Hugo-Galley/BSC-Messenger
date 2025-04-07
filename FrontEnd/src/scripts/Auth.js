@@ -32,7 +32,8 @@ export default async function LoginUser(username, password, event){
                 'user',
                 JSON.stringify({
                     id : userData.id,
-                    username : userData.username
+                    username : userData.username,
+                    icon : userData.icon
                 })
             )
             return userData

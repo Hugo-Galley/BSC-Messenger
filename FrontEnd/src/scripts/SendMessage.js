@@ -1,6 +1,5 @@
 export default async function SendMessage(content, id_conversation, id_receiver){
     try {
-        console.log("L'id récupére lors de l'envoie du message est ", id_conversation, content, id_receiver)
         const response = await fetch("http://localhost:8000/conversation/addMessage",{
             method: 'POST',
             headers :{
@@ -76,7 +75,7 @@ export async function CreateMessageInIndexed(receiver, content, id_message, id_c
                     content: content,
                     datetime: sendAt,
                     id_conversation: id_conversation,
-                    icon : "DF"
+                    icon : "icon"
                 };
                 
                 let addRequest = store.add(message);

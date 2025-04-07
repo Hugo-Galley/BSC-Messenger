@@ -16,6 +16,7 @@ function App() {
         const parsedUser = JSON.parse(storedUser);
         setUserData(parsedUser);
         setIsAuthenticated(true);
+        setSelectedConversation("")
       } catch (error) {
         console.error("Erreur lors de la récupération des données utilisateur:", error);
         localStorage.removeItem('user');
@@ -32,6 +33,7 @@ function App() {
     localStorage.removeItem('user');
     setIsAuthenticated(false);
     setUserData(null);
+    setSelectedConversation("")
   };
 
   function handleSelectedConversation(conversationId){
