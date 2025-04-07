@@ -44,18 +44,18 @@ export default async function LongPollingrequest(id_conversation,myId,lastMessag
                 
             }
 
-            await new Promise(resolve => setTimeout(resolve,500))
+            setTimeout(500)
             await LongPollingrequest(id_conversation,myId,lastMessageDate,setMessage,isActive)
         }
         else{
-            await new Promise(resolve => setTimeout(resolve,1000))
+            setTimeout(1000)
             await LongPollingrequest(id_conversation,myId,lastMessageDate,setMessage,isActive)
         
         }
     }
     catch(error){
         console.error("Erreur de long polling ",error)
-        await new Promise(resolve => setTimeout(resolve,2000))
+        setTimeout(2000)
         await LongPollingrequest(id_conversation,myId,lastMessageDate,setMessage,isActive)
     }
     

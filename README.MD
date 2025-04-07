@@ -50,11 +50,11 @@ const response = await fetch("http://api/toutLesMessages")
             const data = await response.json()
             setMessage(data)
                 
-            await new Promise(resolve => setTimeout(resolve,500))
+            etTimeout(500)
             await LongPollingrequest()
         }
         else{
-            await new Promise(resolve => setTimeout(resolve,1000))
+            setTimeout(1000)
             await LongPollingrequest()
         
         }
