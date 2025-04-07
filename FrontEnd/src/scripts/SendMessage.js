@@ -76,6 +76,7 @@ export async function CreateMessageInIndexed(receiver, content, id_message, id_c
                     content: content,
                     datetime: sendAt,
                     id_conversation: id_conversation,
+                    icon : "DF"
                 };
                 
                 let addRequest = store.add(message);

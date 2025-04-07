@@ -1,3 +1,4 @@
+import { GetInternMessageList } from "./Conversation"
 import { CreateMessageInIndexed } from "./SendMessage"
 export default async function LongPollingrequest(id_conversation,myId,lastMessageDate,setMessage, isActive = true){
     
@@ -31,11 +32,12 @@ export default async function LongPollingrequest(id_conversation,myId,lastMessag
                             console.error("Erreur IndexDb ", error)
                         }
                     }
-                    setMessage((prevListe) => [...prevListe, message])
-                console.log("les messages récupéré sont : ", message)
                 }
                 const lastDate = data[data.length -1].sendAt
                 lastMessageDate =lastDate
+
+                const updateMessageList = await GetInternMessageList(id_conversation)
+                setMessage(updateMessageList)
                
                 
             }

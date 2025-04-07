@@ -57,10 +57,12 @@ async def add_message_to_conversation(add_to_conv : AddMessageToConversation):
             sendAt = datetime.datetime.now(),
             id_conversation = add_to_conv.id_conversation
         )
-        infoMessage = db.query(Messages).order_by(desc(Messages.sendAt)).first()
         db.add(newMessage)
         db.commit()
-        return {"id_message" : infoMessage.id_message, "succes" : "true"}
+
+        db.refresh(newMessage)
+
+        return {"id_message" : newMessage.id_message, "succes" : "true"}
     except Exception as e :
         logging.error(f" Erreur lors de l'ajout d'un message à une conversation : {e}")
         return {"succes" : "false"}
