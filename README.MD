@@ -50,7 +50,7 @@ async function LongPollingrequest(){
         const data = await response.json()
         setMessage(data)
                 
-            etTimeout(500)
+            setTimeout(500)
             await LongPollingrequest()
         }
         else{
