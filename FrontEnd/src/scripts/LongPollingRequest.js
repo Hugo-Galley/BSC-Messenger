@@ -1,5 +1,6 @@
 import { GetInternMessageList } from "./Conversation"
 import { CreateMessageInIndexed } from "./SendMessage"
+import DecryptMessage from "./DecryptMessage"
 export default async function LongPollingrequest(id_conversation,myId,lastMessageDate,setMessage, isActive = true){
     
     if(!isActive){
@@ -25,7 +26,9 @@ export default async function LongPollingrequest(id_conversation,myId,lastMessag
             if (data.length > 0){
                 for (let message of data){
                     try{
-                        await CreateMessageInIndexed(message.id_receiver,message.content, message.id_message,message.id_conversation )
+                        const decryptContent = await DecryptMessage(message.content)
+                        console.log("Le message est , ",decryptContent)
+                        await CreateMessageInIndexed(message.id_receiver,decryptContent, message.id_message,message.id_conversation )
                     }
                     catch(error){
                         if(!error.message.includes("Key already exists")){
