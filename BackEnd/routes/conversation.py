@@ -10,7 +10,7 @@ from models import Conversation, Messages, Users
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives.serialization import load_pem_public_key
-from sqlalchemy import desc, or_, func
+from sqlalchemy import desc, or_
 from sqlalchemy.orm import aliased
 
 
