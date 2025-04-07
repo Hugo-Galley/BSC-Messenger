@@ -44,20 +44,20 @@ Il s'agit d'une technique JS se basant sur la récusivité, nous permetant d'avo
 ##### _Exemple_
 ```js
 async function LongPollingrequest(){
-const response = await fetch("http://api/toutLesMessages")
+    const response = await fetch("http://api/toutLesMessages")
     
-        if(response.status === 200){
-            const data = await response.json()
-            setMessage(data)
+    if(response.status === 200){
+        const data = await response.json()
+        setMessage(data)
                 
-            await new Promise(resolve => setTimeout(resolve,500))
-            await LongPollingrequest()
-        }
-        else{
-            await new Promise(resolve => setTimeout(resolve,1000))
-            await LongPollingrequest()
+        await new Promise(resolve => setTimeout(resolve,500))
+        await LongPollingrequest()
+    }
+    else{
+        await new Promise(resolve => setTimeout(resolve,1000))
+        await LongPollingrequest()
         
-        }
+    }
 }
     
 ```
