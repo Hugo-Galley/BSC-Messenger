@@ -43,12 +43,12 @@ mieux que le `NoSQL`.
 Il s'agit d'une technique JS se basant sur la récusivité, nous permetant d'avoir une communication qusi instanté avec le serveur sans le bombardé de requetes. Elle consite a garder la connexion ouverte avec le serveur peandant un certain laps de temps (30sec/1min) pour verifié si il n'y a pas de nouvelle données et quand la connexion se ferme, on relance immediatement une demande.
 ##### _Exemple_
 ```js
-export default async function LongPollingrequest(){
-const response = await fetch("http://api/toutLesMessages")
+async function LongPollingrequest(){
+    const response = await fetch("http://api/toutLesMessages")
     
-        if(response.status === 200){
-            const data = await response.json()
-            setMessage(data)
+    if(response.status === 200){
+        const data = await response.json()
+        setMessage(data)
                 
             etTimeout(500)
             await LongPollingrequest()
@@ -57,7 +57,7 @@ const response = await fetch("http://api/toutLesMessages")
             setTimeout(1000)
             await LongPollingrequest()
         
-        }
+    }
 }
     
 ```
