@@ -2,6 +2,7 @@ import { useState} from "react";
 import '../Styles/MessageInput.css';
 import SendMessage from "../scripts/SendMessage";
 import { CreateMessageInIndexed } from "../scripts/SendMessage";
+import { SpamBilly } from "../scripts/SpamBilly";
 
 export default function MessageInput({conversationId, conversationInfo, onMessagesent}) {
     const [message, setMessage] = useState(''); 

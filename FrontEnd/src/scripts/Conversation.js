@@ -109,3 +109,30 @@ export async function GetInternMessageList(id_conversation){
     })
 }
 
+export async function DeleteConversation(conversationId,selectedConversation,setSelectedConversation,setRefreshTrigger){
+    try {
+      const response = await fetch(`http://localhost:8000/conversation/${conversationId}`, {
+        method: 'DELETE',
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        if (conversationId === selectedConversation) {
+          setSelectedConversation("");
+        }
+
+        setRefreshTrigger(prev => prev + 1);
+        
+        return true;
+      } else {
+        console.error("Erreur lors de la suppression:", data.message);
+        alert("Échec de la suppression de la conversation");
+        return false;
+      }
+    } catch (error) {
+      console.error("Erreur lors de la suppression:", error);
+      alert("Échec de la suppression de la conversation");
+      return false;
+    }
+  };

@@ -81,7 +81,7 @@ export default function ConversationBar({ userData, onLogout, onsSelectedConvers
             <div className="conversationBar-body">
                 {!isempty? (
                     sortList.map((convCard, index) => (
-                        <button onClick={() => onsSelectedConversations(convCard.id_conversation)}
+                        <div onClick={() => onsSelectedConversations(convCard.id_conversation)}
                             key={index} 
                             className={`conversation-items ${convCard.id_conversation === activeConversationId ? 'active' : ''}`}>
                             <ConversationCard
@@ -95,7 +95,7 @@ export default function ConversationBar({ userData, onLogout, onsSelectedConvers
                                         onDeleteConversation(convCard.id_conversation);
                                     }
                                 }} />
-                        </button>
+                        </div>
                     ))
                 ) : (
                     <div className="no-conversations">

@@ -41,7 +41,7 @@
     margin-left: 20px;
     height: 8vh;
     width: 100%;
-    margin-right: 25px; /* Créer de l'espace pour le bouton de suppression */
+    margin-right: 25px;
     align-items: center;
     flex-grow: 1;
     padding-right: 30px;

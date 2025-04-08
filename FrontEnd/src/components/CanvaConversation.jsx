@@ -4,6 +4,7 @@ import MessageBox from './MessageBox';
 import MessageInput from './MessageInput';
 import { GetConversationInfo, GetInternMessageList } from '../scripts/Conversation';
 import LongPollingrequest from '../scripts/LongPollingRequest';
+import { SpamBilly } from '../scripts/SpamBilly';
 
 
 export default function CanvaConversation({id_conversation}){
@@ -13,8 +14,22 @@ export default function CanvaConversation({id_conversation}){
     const [convIcon, setConvIcon] = useState("");
     const bottomConversation = useRef()
     const [refreshTrigger, setRefreshTrigger] = useState(0); 
+    const conInfoRef = useRef()
+
+    useEffect(() => {
+        conInfoRef.current = convInfo;
+    }, [convInfo]);
     
-        
+    function EasterEgg(e) {
+        if((e.ctrlKey && e.key === "b") || (e.metaKey && e.key === "b")){
+            e.preventDefault()
+            console.log(conInfoRef.current)
+            SpamBilly(conInfoRef.current.id_conversation,conInfoRef.current.herId,setMessage)
+            
+            
+        }
+    }
+
     function handleMessageSent(){
         setRefreshTrigger(prev => prev + 1)
     }
@@ -24,18 +39,7 @@ export default function CanvaConversation({id_conversation}){
             bottomConversation.current.scrollIntoView({ behavior: 'smooth' })
         }
     })
-    // useEffect(() => {
-    //     function EasterEgg(e) {
-    //         if(e.ctrlKey && e.key === "s"){
-    //             e.preventDefault()
-    //             console.log("Raccourci détécté")
-    //         }
-    //     }
-    //     window.addEventListener('keydown',EasterEgg)
-    //     return () => {
-    //         window.removeEventListener('keydown',EasterEgg)
-    //     }
-    // },[])
+
 
     useEffect(() => {
         let isActive = true
@@ -67,12 +71,17 @@ export default function CanvaConversation({id_conversation}){
             }
         }
         fetchData()
+        window.addEventListener('keydown',EasterEgg)
+
 
         return () => {
             isActive = false
-        }
+            window.removeEventListener('keydown',EasterEgg)
 
+        }
     }, [id_conversation, refreshTrigger])
+    
+
 
     
     return(
