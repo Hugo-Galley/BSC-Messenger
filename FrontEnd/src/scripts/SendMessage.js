@@ -33,14 +33,7 @@ export async function CreateMessageInIndexed(receiver, content, id_message, id_c
     const sendAt = new Date().toISOString().split('.')[0].replace('T', ' ');
     
     return new Promise((resolve, reject) => {        
-        let request = indexedDB.open("UserDB", 3);
-
-        request.onupgradeneeded = function(event) {
-            let db = event.target.result;
-            if(!db.objectStoreNames.contains("Conversation")){
-                db.createObjectStore("Conversation", { keyPath: "id_message" });
-            }
-        };
+        let request = indexedDB.open("UserDB", 1);
         
         request.onerror = function(event) {
             console.error("Erreur lors de l'ouverture de la base de données", event.target.error);

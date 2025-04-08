@@ -29,12 +29,17 @@ export default async function generateKeyPair(){
 export async function CreateUserInIndexeed(username) {
     const [publicKey, privateKey] = await generateKeyPair();
     return new Promise((resolve, reject) => {
-        let request = indexedDB.open("UserDB", 3);
+        let request = indexedDB.open("UserDB", 1);
+        
         
         request.onupgradeneeded = function(event) {
             let db = event.target.result;
             if(!db.objectStoreNames.contains("User")){
                 db.createObjectStore("User", { keyPath: "username" });
+            }
+            if (!db.objectStoreNames.contains("Conversation")) {
+                db.createObjectStore("Conversation", { keyPath: "id_message" });
+                console.log("Le magasin d'objets 'Conversation' a été créé.");
             }
         };
         
