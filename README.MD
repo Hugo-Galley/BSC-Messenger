@@ -6,6 +6,8 @@ Le but du projet est de développer une messagerie chiffrée de bout en bout en 
 
 ### Backend
 
+Le backend sera une API en python, nous permettant de faire communiquer le _Frontend_ et la _Base de données_ 
+
 #### Librairies Python
 
 - `cryptography` : pour pouvoir gérer le hash des mots de passe
@@ -13,6 +15,7 @@ Le but du projet est de développer une messagerie chiffrée de bout en bout en 
 - `SqlAlchemy` : utilisation d'un ORM pour simplifier la gestion de la base de données et nous permettre de travailler
 avec des objets
 - `sqlacodegen` : pour pouvoir faire de la rétro-ingénierie sur la base de données afin de récupérer les modèles sous forme d'objets, à utiliser avec SqlAlchemy
+- `FastApi` : pour pouvoir créer une API avec les differnetes routes afin de pouvoir faire communiquer notre _Frontend_ avec notre _Base de données_ 
 
 ### FrontEnd
 
@@ -20,7 +23,6 @@ avec des objets
 
 - `React` : possibilité de travailler avec des composants, et de disposer des nombreuses librairies disponibles
 - `Vite` : pour pouvoir créer facilement et rapidement un projet React, avec un serveur de développement au démarrage ultra rapide qui ne recharge que les modules modifiés
-- `Window.crypto` : permet de pouvoir gerer le RSA coté Frontend
 
 
 ### Base de données
@@ -32,7 +34,7 @@ mieux que le `NoSQL`.
 
 ### Algorithmes de chiffrement et salage
 
-- `SHA-256` : pour le hachage des mots de passe, car c'est une méthode robuste qui a fait ses preuves
+- `SHA-256` : pour le hachage des mots de passe, car c'est une méthode robuste. Pour le moment elle ne permet pas d'être reverse Inegneniere contrairement au `MD5` qui lui peux nous pemettre d'obtenir la chaine de charactére initial, a partir du hash
 - `os.urandom` : pour générer un sel aléatoire plus difficile à *reverse engineer* qu'une simple librairie Python comme *Random*
 - `RSA` : alogrithme de chiffrement se basant sur un principe de pairs de clée (public/privé) afin de garantir l'intégrité et la confidentialité dans l'échange de données
 
@@ -65,31 +67,35 @@ async function LongPollingrequest(){
 ## Mise en place
 
 ### Backend
-1) Installer les dépendances 
+1) Installer **Python**
+   Pour pouvoir lancer le backend il vous faudra installer _Python_. Vous pouvez le faire via se lien : [Python]("https://www.python.org/downloads/")
+
+2) Installer les dépendances 
 
 Pour installer les dépendances Python requises, placez-vous dans le sous-dossier `Backend` et exécutez la ligne de commande suivante :
 ```bash
 pip install -r requirements.txt
 ```
 
-2) Création de la base de données
+3) Création de la base de données
 
 Vous devez créer une base de données avec le schéma présent dans `Backend/BDD/bdd.sql`.
 
-3) Configuration des variables de l'application
+4) Configuration des variables de l'application
 
 Vous trouverez un fichier `variables-example.json` qui est un modèle des variables à renseigner pour le bon fonctionnement de l'application. Il vous suffira de remplir le fichier avec vos variables et de le renommer en `variables.json`.
 
 ### FrontEnd
-
-1) Installer les dépendances
+1) Installer **NodeJS**
+   Pour pouvoir exécuter la parti FrontEnd il vous faut installer NodeJS. Vous pouvez le faire via se lien : [NodeJS]("https://nodejs.org/fr/download")
+2) Installer les dépendances
 
 Placez-vous dans le dossier `Frontend` puis exécutez la commande suivante :
 ```bash
 npm install
 ```
 
-2) Lancer le serveur de développement
+3) Lancer le serveur de développement
 
 Pour lancer le serveur de développement, exécutez la commande suivante :
 ```bash

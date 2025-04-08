@@ -24,6 +24,18 @@ export default function CanvaConversation({id_conversation}){
             bottomConversation.current.scrollIntoView({ behavior: 'smooth' })
         }
     })
+    // useEffect(() => {
+    //     function EasterEgg(e) {
+    //         if(e.ctrlKey && e.key === "s"){
+    //             e.preventDefault()
+    //             console.log("Raccourci détécté")
+    //         }
+    //     }
+    //     window.addEventListener('keydown',EasterEgg)
+    //     return () => {
+    //         window.removeEventListener('keydown',EasterEgg)
+    //     }
+    // },[])
 
     useEffect(() => {
         let isActive = true
