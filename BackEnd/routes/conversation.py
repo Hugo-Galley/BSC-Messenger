@@ -169,3 +169,20 @@ async def get_conversation_info(get_conversation : GetConversationInfo):
             }
     else:
         return {"error": "Conversation non trouvée"}
+    
+@router.delete("/conversation/{conversation_id}")
+async def delete_conversation(conversation_id: str):
+        try:
+            db.query(Messages).filter(Messages.id_conversation == conversation_id).delete()
+            result = db.query(Conversation).filter(Conversation.id_conversation == conversation_id).delete()
+            db.commit()
+            if result > 0:
+                return {"success" : True, " Message" : "Conversation supprimée avec succès"}
+            else: 
+                return {"success" : False, " Message" : "Conversation non trouvée"}
+        except Exception as e:
+                db.rollback()
+                logging.error(f"Erreur lors de la suppression de la conversation {conversation_id}: {e}")
+                return {"success" : False, " Message" : "Erreur lors de la suppression de la conversation"}
+
+

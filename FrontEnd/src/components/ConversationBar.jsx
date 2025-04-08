@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import PopUpNewConversation from "./PopUpNewConversation";
 import {GetConversationsBar} from "../scripts/GetInformations";
 
-export default function ConversationBar({ userData, onLogout, onsSelectedConversations, activeConversationId }) {
+export default function ConversationBar({ userData, onLogout, onsSelectedConversations, activeConversationId, onDeleteConversation, refreshTrigger }) {
     const [showPopUp, setShowPopUp] = useState(false);
     const [listOfConversation, setListOfConversation] = useState([]);
     const [sortList, setSortList] = useState([]);
@@ -36,9 +36,8 @@ export default function ConversationBar({ userData, onLogout, onsSelectedConvers
         }
     }
     useEffect(() => {
-
         fetchConversations();
-    }, [userData]);
+    }, [userData, refreshTrigger]);
 
     return (
         <div className="ConversationBar-container">
@@ -90,7 +89,12 @@ export default function ConversationBar({ userData, onLogout, onsSelectedConvers
                                 icon={convCard.icon}
                                 title={convCard.name}
                                 LastMessagedate={convCard.lastMessageDate}
-                                body={convCard.body} />
+                                body={convCard.body}
+                                onDelete={() => {
+                                    if (window.confirm("Êtes-vous sûr de vouloir supprimer cette conversation ?")) {
+                                        onDeleteConversation(convCard.id_conversation);
+                                    }
+                                }} />
                         </button>
                     ))
                 ) : (
