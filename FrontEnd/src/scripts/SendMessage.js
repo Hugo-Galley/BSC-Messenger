@@ -33,7 +33,7 @@ export async function CreateMessageInIndexed(receiver, content, id_message, id_c
     const sendAt = new Date().toISOString().split('.')[0].replace('T', ' ');
     
     return new Promise((resolve, reject) => {        
-        let request = indexedDB.open("UserDB", 3);
+        let request = indexedDB.open("UserDB", 4);
 
         request.onupgradeneeded = function(event) {
             let db = event.target.result;

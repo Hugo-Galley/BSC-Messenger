@@ -65,7 +65,7 @@ export async function GetInternMessageList(id_conversation){
     const myid = storedUser ? JSON.parse(storedUser).id : ""
     let msgList = [];
     return new Promise((resolve, reject) => {
-        let request = indexedDB.open("UserDB", 3);
+        let request = indexedDB.open("UserDB", 4);
 
         request.onerror = function(event){
             console.error("Erreur lors de l'ouverture de la base de données ", event.target.error);
