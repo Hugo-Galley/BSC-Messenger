@@ -120,34 +120,42 @@
     position: absolute;
     top: -10px;
     right: -10px;
-    width: 28px;
-    height: 28px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
-    background-color: #ff4757;
-    color: white;
+    background-color: #ffffff;
+    color: #000000;
     border: none;
-    font-weight: bold;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    transition: all 0.2s ease-in-out;
-    opacity: 0.8;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 16px;
+    font-weight: 300;
+  }
+  
+  .remove-image::before {
+    content: "+";
+    transform: rotate(45deg);
+    display: block;
   }
   
   .remove-image:hover {
-    opacity: 1;
     transform: scale(1.1);
-    background-color: #ff6b81;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    background-color: #f5f5f7;
   }
   
   .remove-image:active {
     transform: scale(0.95);
+    background-color: #ebebeb;
   }
   
   .remove-image:focus {
     outline: none;
-    box-shadow: 0 0 0 2px rgba(255, 71, 87, 0.5);
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.3);
   }
   

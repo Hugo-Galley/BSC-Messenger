@@ -78,7 +78,7 @@ export default function MessageInput({conversationId, conversationInfo, onMessag
                                 setpreviewUrl('')
                             }
                             }>
-                                X
+                                
                             </button>
                         </div>
                     )
