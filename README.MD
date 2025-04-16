@@ -37,6 +37,11 @@ mieux que le `NoSQL`.
 - `SHA-256` : pour le hachage des mots de passe, car c'est une méthode robuste. Pour le moment elle ne permet pas d'être reverse Inegneniere contrairement au `MD5` qui lui peux nous pemettre d'obtenir la chaine de charactére initial, a partir du hash
 - `os.urandom` : pour générer un sel aléatoire plus difficile à *reverse engineer* qu'une simple librairie Python comme *Random*
 - `RSA` : alogrithme de chiffrement se basant sur un principe de pairs de clée (public/privé) afin de garantir l'intégrité et la confidentialité dans l'échange de données
+- `AES-GCM` : algorithme de chiffrement symetrique, c'est à dire qu'il s'agit de la même clé pour chiffrer et dechiffré. Mais peux chiffrer des données beaucoup plus grande ce qui nous permet par exemple de pouvoir envoyé des images.
+
+### Chiffrement utilisé
+
+Nous avons l'`AES-GCM` pour chiffrer les données, ainsi que `os.urandom` pour generer le nonce. Puis nous avons utilisé le `RSA` pour envoyé nos données chiffré ainsi que la clé `AES` et son nonce pour pouvoir dechiffrer le message à l'arrivé.  
 
 ### Technique mise en place
 
