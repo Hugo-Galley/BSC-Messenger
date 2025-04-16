@@ -20,6 +20,7 @@ class AddMessageToConversation(BaseModel):
     id_receiver : str
     content : str
     id_conversation : str
+    dataType : str
 class GetAllConversationForUser(BaseModel):
     id_user : str
 

@@ -1,5 +1,7 @@
-export default async function SendMessage(content, id_conversation, id_receiver){
+export default async function SendMessage(content, id_conversation, id_receiver,type){
+    console.log("Le type que je vais enregsiterer dans API  est : ",type)
     try {
+        console.log("Le contenu envoyé est : ",content)
         const response = await fetch("http://localhost:8000/conversation/addMessage",{
             method: 'POST',
             headers :{
@@ -8,6 +10,7 @@ export default async function SendMessage(content, id_conversation, id_receiver)
             body : JSON.stringify({
                 id_receiver : id_receiver,
                 content : content,
+                dataType : type,
                 id_conversation : id_conversation
             })
         })
@@ -29,8 +32,9 @@ export default async function SendMessage(content, id_conversation, id_receiver)
         return false
     }
 }
-export async function CreateMessageInIndexed(receiver, content, id_message, id_conversation) {
+export async function CreateMessageInIndexed(receiver, content, id_message, id_conversation,type) {
     const sendAt = new Date().toISOString().split('.')[0].replace('T', ' ');
+    console.log("Le type que je vais enregsiterer est : ",type)
     
     return new Promise((resolve, reject) => {        
         let request = indexedDB.open("UserDB", 1);
@@ -68,7 +72,8 @@ export async function CreateMessageInIndexed(receiver, content, id_message, id_c
                     content: content,
                     datetime: sendAt,
                     id_conversation: id_conversation,
-                    icon : "icon"
+                    icon : "icon",
+                    dataType : type
                 };
                 
                 let addRequest = store.add(message);

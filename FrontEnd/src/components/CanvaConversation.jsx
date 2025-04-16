@@ -60,9 +60,7 @@ export default function CanvaConversation({id_conversation}){
                             lastDate,
                             setMessage,
                             isActive
-                        )
-
-                        
+                        ) 
                             
                 }
                 }
@@ -100,7 +98,10 @@ export default function CanvaConversation({id_conversation}){
                     <div className="message" key={index}>
                         <div className={`message-container-${messageValue.type}`}>
                             <p className="message-icon">{messageValue.icon}</p>
-                            <MessageBox key={index} content={messageValue.content} sendAt={messageValue.sendAt} type={messageValue.type}/>
+                            {
+                                console.log("La veleur du message est ",messageValue)
+                            }
+                            <MessageBox key={index} content={messageValue.content} sendAt={messageValue.sendAt} dataType={messageValue.dataType} type={messageValue.type}/>
                         </div>
                     </div>
                     ))

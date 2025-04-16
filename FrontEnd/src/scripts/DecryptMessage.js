@@ -66,19 +66,49 @@ export default async function DecryptMessage(content) {
     try {
         const rawPrivateKey = await GetPrivateKey();
         const finalPrivateKey = await importPrivateKey(rawPrivateKey);
-        console.log("Clé privée importée avec succès");
 
-        const encryptedContent = Uint8Array.from(atob(content), c => c.charCodeAt(0));
-        const decryptedBuffer = await window.crypto.subtle.decrypt(
-            {
-                name: "RSA-OAEP"
-            },
-            finalPrivateKey,
-            encryptedContent
-        );
-        return new TextDecoder().decode(decryptedBuffer);
+        const {encryptedContent, nonce, encryptedAesKey} = JSON.parse(content);
+        
+
+        try {
+            const encryptedAesKeyBytes = Uint8Array.from(atob(encryptedAesKey), c => c.charCodeAt(0));
+            
+            const decryptedBuffer = await window.crypto.subtle.decrypt(
+                {
+                    name: "RSA-OAEP"
+                },
+                finalPrivateKey,
+                encryptedAesKeyBytes
+            );
+            
+            const aesKey = await window.crypto.subtle.importKey(
+                "raw",
+                decryptedBuffer,
+                {name: "AES-GCM"},
+                false,
+                ["decrypt"]
+            );
+            
+            const nonceBytes = Uint8Array.from(atob(nonce), c => c.charCodeAt(0));
+            
+            const encryptedContentBytes = Uint8Array.from(atob(encryptedContent), c => c.charCodeAt(0));
+            
+            const decryptedContent = await window.crypto.subtle.decrypt(
+                {
+                    name: "AES-GCM",
+                    iv: nonceBytes,
+                },
+                aesKey,
+                encryptedContentBytes
+            );
+            
+            return new TextDecoder().decode(decryptedContent);
+        } catch (error) {
+            console.error("Erreur détaillée lors du déchiffrement:", error);
+            throw error;
+        }
     } catch (error) {
-        console.error("Erreur lors de la décryption : ", error);
+        console.error("Erreur lors de la décryption:", error);
         throw error;
     }
 }

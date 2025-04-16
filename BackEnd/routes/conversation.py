@@ -1,15 +1,18 @@
 import asyncio
 import base64
 import datetime
+import json
 import logging
+import os
 import uuid
 from config import db
 from fastapi import APIRouter
 from Class.api_class_body import CreateNewConversation, AddMessageToConversation, GetConversationInfo, GetMessageOfConversation
 from models import Conversation, Messages, Users
-from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives.serialization import load_pem_public_key
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from sqlalchemy import desc, or_
 from sqlalchemy.orm import aliased
 
@@ -40,22 +43,14 @@ async def create_new_conversation(create_conversation : CreateNewConversation):
 async def add_message_to_conversation(add_to_conv : AddMessageToConversation):
     try:
         receiver = db.query(Users).filter(Users.id_user == add_to_conv.id_receiver).first()
-        public_key = load_pem_public_key(receiver.public_key.encode())
-        encryptedContent = public_key.encrypt(
-            add_to_conv.content.encode(),
-            padding.OAEP(
-                mgf=padding.MGF1(algorithm=hashes.SHA256()),
-                algorithm=hashes.SHA256(),
-                label=None
-            )
-        )
-        final_content = base64.b64encode(encryptedContent).decode('utf-8')
+        encrypted = encrypt_Message(add_to_conv.content.encode(), receiver.public_key)
         newMessage = Messages(
             id_message = str(uuid.uuid4()),
             id_receiver = add_to_conv.id_receiver,
-            content = final_content,
+            content = json.dumps(encrypted),
             sendAt = datetime.datetime.now(),
-            id_conversation = add_to_conv.id_conversation
+            id_conversation = add_to_conv.id_conversation,
+            dataType =  add_to_conv.dataType
         )
         db.add(newMessage)
         db.commit()
@@ -132,7 +127,8 @@ async def get_all_message(get_message : GetMessageOfConversation):
                     "id_conversation" : message.id_conversation,
                     "content" : message.content,
                     "sendAt" : message.sendAt,
-                    "id_receiver" : message.id_receiver
+                    "id_receiver" : message.id_receiver,
+                    "dataType" : message.dataType
                 }
             for message in messageList]
         await asyncio.sleep(pollingInterval)
@@ -186,3 +182,27 @@ async def delete_conversation(conversation_id: str):
                 return {"success" : False, " Message" : "Erreur lors de la suppression de la conversation"}
 
 
+def encrypt_Message(content : bytes, public_key : str):
+    aes_key = AESGCM.generate_key(bit_length=256)
+    aesGcm = AESGCM(aes_key)
+
+    nonce = os.urandom(12)
+
+    encryptedContent = aesGcm.encrypt(nonce, content, None)
+
+    public_key_final = serialization.load_pem_public_key(public_key.encode())
+
+    encryptedAesKey = public_key_final.encrypt(
+        aes_key,
+        padding.OAEP(
+            mgf=padding.MGF1(hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=None
+        )
+    )
+
+    return {
+        "encryptedContent" : base64.b64encode(encryptedContent).decode(),
+        "nonce" : base64.b64encode(nonce).decode(),
+        "encryptedAesKey" : base64.b64encode(encryptedAesKey).decode()
+    }

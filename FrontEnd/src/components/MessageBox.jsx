@@ -1,9 +1,18 @@
 import '../Styles/MessageBox.css'
 
-export default function MessageBox({content, sendAt, type}){
+export default function MessageBox({content, sendAt,type, dataType}){
+    console.log("le type est ",dataType)
     return(
         <div className={`messageBox ${type}`}>
-            <p className="messageText">{content}</p>
+            
+            {
+                dataType === "image" ? (
+                    <img src={content} alt="Image envoyé" />
+                ) : (
+                        <p className="messageText">{content}</p>
+                )
+            }
+            
             <p className="messageTime">{sendAt}</p>
         </div>
     )

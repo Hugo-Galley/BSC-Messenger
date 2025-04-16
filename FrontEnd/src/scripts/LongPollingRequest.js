@@ -25,9 +25,15 @@ export default async function LongPollingrequest(id_conversation,myId,lastMessag
             const data = await response.json()
             if (data.length > 0){
                 for (let message of data){
-                    try{
+                    try {
                         const decryptContent = await DecryptMessage(message.content)
-                        await CreateMessageInIndexed(message.id_receiver,decryptContent, message.id_message,message.id_conversation )
+                        await CreateMessageInIndexed(
+                            message.id_receiver,
+                            decryptContent, 
+                            message.id_message,
+                            message.id_conversation,
+                            message.dataType 
+                        )
                     }
                     catch(error){
                         if(!error.message.includes("Key already exists")){
