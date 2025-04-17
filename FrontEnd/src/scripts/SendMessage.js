@@ -34,7 +34,6 @@ export default async function SendMessage(content, id_conversation, id_receiver,
 }
 export async function CreateMessageInIndexed(receiver, content, id_message, id_conversation,type) {
     const sendAt = new Date().toISOString().split('.')[0].replace('T', ' ');
-    console.log("Le type que je vais enregsiterer est : ",type)
     
     return new Promise((resolve, reject) => {        
         let request = indexedDB.open("UserDB", 1);
