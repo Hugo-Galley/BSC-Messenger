@@ -2,6 +2,7 @@ import { useState } from 'react';
 import LoginForm from '../components/auth/LoginForm';
 import RegisterForm from '../components/auth/RegisterForm';
 import '../Styles/Auth.css';
+import logo from "../assets/logo.png"
 
 export default function AuthPage({ onAuthSuccess }) {
   const [isLoginView, setIsLoginView] = useState(true);
@@ -18,7 +19,8 @@ export default function AuthPage({ onAuthSuccess }) {
   return (
     <div className="auth-page">
       <div className="auth-logo">
-        <h1>BSC Messenger</h1>
+        <img src={logo} alt="" className="logoShadow"/>
+        <h1>Phantom</h1>
         <p className="auth-tagline">Messagerie chiffrée de bout en bout</p>
       </div>
 
