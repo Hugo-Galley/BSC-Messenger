@@ -7,6 +7,11 @@ Le but du projet est de développer une messagerie chiffrée de bout en bout en 
 
 Le backend sera une API en Python, permettant de faire communiquer le _Frontend_ et la _Base de données_.
 
+### Doc autogénéré de l'API
+
+Pour acceder a la doc autogenér de l'api, il vous suffit d'aller l'adresse suivante :
+[http://localhost:8000/docs]("http://localhost:8000/docs") ou sur celle la [http://127.0.0.1:8000/redoc]("http://127.0.0.1:8000/redoc")
+
 #### Librairies Python
 
 - `cryptography` : pour gérer le hash des mots de passe.
