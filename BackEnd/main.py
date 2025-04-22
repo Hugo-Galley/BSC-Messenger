@@ -12,7 +12,10 @@ app.include_router(router)
 app.include_router(conVrouter)
 
 authorize_origins = [
-    "http://localhost:5173"
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",  
+    "http://frontend:5173" 
 ]
 
 app.add_middleware(

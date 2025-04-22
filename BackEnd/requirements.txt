@@ -1,4 +1,3 @@
-logging
 colorlog
 sqlalchemy
 pymysql
@@ -6,3 +5,4 @@ sqlacodegen
 fastapi
 uvicorn
 pydantic
+cryptography

@@ -1,11 +1,11 @@
 from typing import List, Optional
 
 from sqlalchemy import CHAR, DateTime, ForeignKeyConstraint, Index, String, Text
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.ext.declarative import declarative_base
 import datetime
 
-class Base(DeclarativeBase):
-    pass
+Base = declarative_base()
 
 
 class Users(Base):

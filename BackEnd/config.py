@@ -3,14 +3,33 @@ import logging
 import colorlog
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from models import Base
 import os
+import pymysql
 
 def load_config():
     with open("variables.json") as f:
         return json.load(f)
 
 def configBdd():
+    user = data['Bdd']['User']
+    password = data['Bdd']['Password']
+    host = data['Bdd']['Host']
+    port = data['Bdd']['Port']
+    database = data['Bdd']['DataBase']
+
+    connection = pymysql.connect(
+        host=host,
+        user=user,
+        password=password,
+        port=int(port)
+    )
+    with connection.cursor() as cursor:
+        cursor.execute(f"CREATE DATABASE IF NOT EXISTS `{database}`")
+    connection.close()
+
     engine = create_engine(f"mysql+pymysql://{data['Bdd']['User']}:{data['Bdd']['Password']}@{data['Bdd']['Host']}:{data['Bdd']['Port']}/{data['Bdd']['DataBase']}")
+    Base.metadata.create_all(bind=engine)
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
     db = SessionLocal()
     return db
