@@ -71,3 +71,22 @@
 .messageBox.sent .messageTime {
     color: rgba(255, 255, 255, 0.7);
 }
+.document-container {
+    display: flex;
+    align-items: center;
+}
+
+.document-icon {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f5f5f7;
+    color: #0b93f6;
+    border-radius: 8px;
+    padding: 8px 14px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1em;
+    box-shadow: 0 1px 4px rgba(11, 147, 246, 0.08);
+}
+

@@ -1,6 +1,7 @@
-export default async function GetTypeFromExtensions(extensions,selectedFile,selectedAudio){
+export default async function GetTypeFromExtensions(extensions,selectedFile){
+    console.log("Je compare avec le type : ",extensions)
     if(selectedFile){
-        if(extensions.includes("pdf")){
+        if(extensions.includes("application")){
             return "pdf"
         }
         else if (extensions.includes("mpeg")){
@@ -13,8 +14,6 @@ export default async function GetTypeFromExtensions(extensions,selectedFile,sele
             return "image"
         }
     }
-    else if (selectedAudio !== ""){
-        return "audio"
-    }
+    
     return "text"
 } 

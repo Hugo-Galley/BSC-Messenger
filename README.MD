@@ -71,6 +71,10 @@ async function LongPollingrequest(){
 
 ## Mise en place
 
+### Navigateur
+
+Attention, si vous tenter d'envoyé des messages audio de *Chrome* vers *Safari* l'audio ne sera pas correctement transmis du à une conversion mal effectué du _WAV_ au _MPEG_ avec Chrome
+
 ### Backend
 1) Installer **Python**
    Pour pouvoir lancer le backend il vous faudra installer _Python_. Vous pouvez le faire via se lien : [Python]("https://www.python.org/downloads/")

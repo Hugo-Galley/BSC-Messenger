@@ -1,4 +1,4 @@
-import { useRef, useState} from "react";
+import { useState} from "react";
 import '../Styles/MessageInput.css';
 import SendMessage from "../scripts/SendMessage";
 import { CreateMessageInIndexed } from "../scripts/SendMessage";
@@ -10,65 +10,7 @@ export default function MessageInput({conversationId, conversationInfo, onMessag
     const [previewUrl, setpreviewUrl] = useState('')
     const [base64File, setbase64File] = useState(null)
     const [fileExtensions, setFileExtension] = useState("")
-    const [isRecording, setIsrecording] = useState(false)
-    const [audioUrl, setAudioUrl] = useState("")
-    const [showModal, setShowModal] = useState(false)
 
-    const mediaRecordRef = useRef(null)
-    const audioChunksref = useRef([])
-
-    async function startRecording(){
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({audio: true})
-            const mediaRecorder = new MediaRecorder(stream)
-            mediaRecordRef.current = mediaRecorder
-
-            setIsrecording(true)
-            audioChunksref.current = []
-            mediaRecorder.ondataavailable = (event) => {
-                if (event.data.size > 0) {
-                    audioChunksref.current.push(event.data);
-                }
-            };
-            mediaRecorder.onstop = () => {
-                const audioBlob = new Blob(audioChunksref.current, {type: 'audio/mpeg'})
-                const audioUrl = URL.createObjectURL(audioBlob)
-                setAudioUrl(audioUrl)
-
-                const reader = new FileReader()
-                reader.readAsDataURL(audioBlob)
-                reader.onloadend = () => {
-                    const base64Audio = reader.result
-                    setbase64File(base64Audio)
-                    setFileExtension('audio/mpeg')
-                    console.log(fileExtensions)
-                }
-
-            }
-            mediaRecorder.start()
-        } catch (error) {
-            console.error("Probleme lors du recording ",error)
-        }
-    }
-
-    async function stopRecording(){
-        if(mediaRecordRef.current && isRecording){
-            mediaRecordRef.current.stop()
-            setIsrecording(false)
-            mediaRecordRef.current.stream.getTracks().forEach(track => track.stop());
-        }
-    }
-    function closeAudioModal(e){
-        if (e) e.preventDefault();
-        setShowModal(false)
-        if(audioUrl){
-            SendMessageInConversation(e)
-        }
-
-        if(isRecording){
-            stopRecording()
-        }
-    }
 
     async function SendMessageInConversation(e){
         e.preventDefault()
@@ -77,7 +19,7 @@ export default function MessageInput({conversationId, conversationInfo, onMessag
             console.error("Information de conversation manquante");
             return;
         }
-        const fileType = await GetTypeFromExtensions(fileExtensions,selectedFile,audioUrl)
+        const fileType = await GetTypeFromExtensions(fileExtensions,selectedFile)
         const result = await SendMessage(base64File ? base64File : message, conversationId, conversationInfo.herId,fileType)
         if (result !== "") {
             await CreateMessageInIndexed(conversationInfo.herId,base64File ? base64File : message,result,conversationId,fileType)
@@ -154,7 +96,7 @@ export default function MessageInput({conversationId, conversationInfo, onMessag
                         id="file-input" 
                         className="hidden-file-input" 
                         style={{ display: 'none' }}
-                        accept="image/*,.pdf,.mp3,.wav,.mp4"
+                        // accept="image/*,.pdf,.mp3,.wav,.mp4,"
                         onChange={onSelectedFile}
                     />
                     <label htmlFor="file-input" className="file-input-label">
@@ -162,63 +104,7 @@ export default function MessageInput({conversationId, conversationInfo, onMessag
                             <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0z"/>
                         </svg>
                     </label>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-mic-fill" viewBox="0 0 16 16" onClick={() => setShowModal(true)}>
-                        <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0z"/>
-                        <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5"/>
-                    </svg>
 
-                    {showModal && (
-                        <div className="overlayAudioRecorder" onClick={closeAudioModal}>
-                            <div className="modalAudio" onClick={e => e.stopPropagation()}>
-                                <h3>Enregistrement audio</h3>
-                                <div className="audio-controls">
-                                    {!isRecording ? (
-                                        <button 
-                                            type="button" 
-                                            onClick={startRecording} 
-                                            className="record-button"
-                                            disabled={audioUrl !== ''}
-                                        >
-                                            Démarrer l'enregistrement
-                                        </button>
-                                    ) : (
-                                        <button 
-                                            type="button" 
-                                            onClick={stopRecording} 
-                                            className="stop-button"
-                                        >
-                                            Arrêter
-                                        </button>
-                                    )}
-                                </div>
-                                
-                                {audioUrl && (
-                                    <div className="audio-preview">
-                                        <audio src={audioUrl} controls />
-                                        <div className="audio-actions">
-                                            <button 
-                                                type="button" 
-                                                onClick={() => {
-                                                    setbase64File(null);
-                                                    setAudioUrl('');
-                                                }}
-                                                className="discard-button"
-                                            >
-                                                Supprimer
-                                            </button>
-                                            <button 
-                                                type="button" 
-                                                onClick={(e) => closeAudioModal(e)}
-                                                className="use-button"
-                                            >
-                                                Utiliser
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    )}
 
                 </div>
                 <div className="input-wrapper">

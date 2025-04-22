@@ -43,7 +43,20 @@ async def create_new_conversation(create_conversation : CreateNewConversation):
 async def add_message_to_conversation(add_to_conv : AddMessageToConversation):
     try:
         receiver = db.query(Users).filter(Users.id_user == add_to_conv.id_receiver).first()
-        encrypted = encrypt_Message(add_to_conv.content.encode(), receiver.public_key)
+        if not receiver:
+            return {"succes": "false", "error": "Receiver not found"}
+        # Vérifie si le contenu est déjà bytes ou str
+        content = add_to_conv.content
+        if isinstance(content, str):
+            content_bytes = content.encode('utf-8')
+        elif isinstance(content, bytes):
+            content_bytes = content
+        else:
+            return {"succes": "false", "error": "Invalid content type"}
+        # Limite la taille du message (par exemple 10 Mo)
+        if len(content_bytes) > 10 * 1024 * 1024:
+            return {"succes": "false", "error": "Message too large"}
+        encrypted = encrypt_Message(content_bytes, receiver.public_key)
         newMessage = Messages(
             id_message = str(uuid.uuid4()),
             id_receiver = add_to_conv.id_receiver,
@@ -54,14 +67,11 @@ async def add_message_to_conversation(add_to_conv : AddMessageToConversation):
         )
         db.add(newMessage)
         db.commit()
-
         db.refresh(newMessage)
-
         return {"id_message" : newMessage.id_message, "succes" : "true"}
     except Exception as e :
-        logging.error(f" Erreur lors de l'ajout d'un message à une conversation : {e}")
-        return {"succes" : "false"}
-
+        logging.error(f"Erreur lors de l'ajout d'un message à une conversation : {e}")
+        return {"succes" : "false", "error": str(e)}
 
 @router.get("/conversation/allOfUser")
 async def get_all_conversation_for_user(id_user: str):
