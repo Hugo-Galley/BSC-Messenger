@@ -3,6 +3,7 @@ from typing import List, Optional
 from sqlalchemy import CHAR, DateTime, ForeignKeyConstraint, Index, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.dialects.mysql import LONGTEXT
 import datetime
 
 Base = declarative_base()
@@ -55,7 +56,7 @@ class Messages(Base):
     )
 
     id_message: Mapped[str] = mapped_column(CHAR(36), primary_key=True)
-    content: Mapped[str] = mapped_column(Text)
+    content: Mapped[str] = mapped_column(LONGTEXT)
     id_receiver: Mapped[str] = mapped_column(CHAR(36))
     sendAt: Mapped[datetime.datetime] = mapped_column(DateTime)
     id_conversation: Mapped[str] = mapped_column(CHAR(36))

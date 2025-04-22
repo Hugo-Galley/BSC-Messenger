@@ -48,6 +48,15 @@ export default function MessageInput({conversationId, conversationInfo, onMessag
     function onSelectedFile(event){
         const file = event.target.files[0]
         if (file){
+            const maxSizeInMB = 10;
+            const fileSizeInMB = file.size / (1024 * 1024);
+            
+            if (fileSizeInMB > maxSizeInMB) {
+                alert(`Le fichier est trop volumineux (${fileSizeInMB.toFixed(2)} Mo). La taille maximale autorisée est de ${maxSizeInMB} Mo.`);
+                event.target.value = ''; 
+                return;
+            }
+            
             setSelectedFile(file)
             const reader = new FileReader()
             reader.onload =() => {
@@ -56,7 +65,7 @@ export default function MessageInput({conversationId, conversationInfo, onMessag
             }
             const fileType = file.type
             console.log("Le type du fichier est ",fileType)
-           setFileExtension(fileType)
+            setFileExtension(fileType)
             reader.onerror = (error) => {
                 console.error("Erreur lors de la coversion de l'image en base64 ", error)
             }
@@ -65,7 +74,6 @@ export default function MessageInput({conversationId, conversationInfo, onMessag
             const fileUrl = URL.createObjectURL(file)
             setpreviewUrl(fileUrl)
         }
-
     }
 
 

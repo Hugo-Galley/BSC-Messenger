@@ -1,4 +1,4 @@
-# BSC Messenger
+# Phantom
 Le but du projet est de développer une messagerie chiffrée de bout en bout en Python.
 
 ## Technologies utilisées

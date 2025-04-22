@@ -45,7 +45,6 @@ async def add_message_to_conversation(add_to_conv : AddMessageToConversation):
         receiver = db.query(Users).filter(Users.id_user == add_to_conv.id_receiver).first()
         if not receiver:
             return {"succes": "false", "error": "Receiver not found"}
-        # Vérifie si le contenu est déjà bytes ou str
         content = add_to_conv.content
         if isinstance(content, str):
             content_bytes = content.encode('utf-8')
@@ -53,8 +52,7 @@ async def add_message_to_conversation(add_to_conv : AddMessageToConversation):
             content_bytes = content
         else:
             return {"succes": "false", "error": "Invalid content type"}
-        # Limite la taille du message (par exemple 10 Mo)
-        if len(content_bytes) > 10 * 1024 * 1024:
+        if len(content_bytes) > 5 * 1024 * 1024:
             return {"succes": "false", "error": "Message too large"}
         encrypted = encrypt_Message(content_bytes, receiver.public_key)
         newMessage = Messages(
