@@ -74,6 +74,8 @@ async function LongPollingRequest() {
 
 Attention, si vous tentez d'envoyer des messages audio de *Chrome* vers *Safari*, l'audio ne sera pas correctement transmis à cause d'une conversion mal effectuée du _WAV_ au _MPEG_ avec Chrome.
 
+## Méthode 1 (Recommandé)
+
 ### Docker
 
 L'application fonctionne grâce à des conteneurs `Docker`, ce qui permet un déploiement facile et une exécution sur n'importe quelle machine.  
@@ -86,3 +88,38 @@ Pour accéder à l'application, rendez-vous à l'adresse suivante :
 ```
 http://localhost:5173
 ```
+
+## Méthode 2
+
+### Backend
+ 1) Installer **Python**
+    Pour pouvoir lancer le backend il vous faudra installer _Python_. Vous pouvez le faire via se lien : [Python]("https://www.python.org/downloads/")
+ 
+ 2) Installer les dépendances 
+   Pour installer les dépendances Python requises, placez-vous dans le sous-dossier `Backend` et exécutez la ligne de commande suivante :
+```
+ pip install -r requirements.txt
+ ```
+) Création de la base de données
+ 
+ Vous devez créer une base de données avec le schéma présent dans `Backend/BDD/bdd.sql`.
+ 
+ 4) Configuration des variables de l'application
+ 
+ Vous trouverez un fichier `variables-example.json` qui est un modèle des variables à renseigner pour le bon fonctionnement de l'application. Il vous suffira de remplir le fichier avec vos variables et de le renommer en `variables.json`.
+ 
+ ### FrontEnd
+ 1) Installer **NodeJS**
+    Pour pouvoir exécuter la parti FrontEnd il vous faut installer NodeJS. Vous pouvez le faire via se lien : [NodeJS]("https://nodejs.org/fr/download")
+ 2) Installer les dépendances
+ 
+ Placez-vous dans le dossier `Frontend` puis exécutez la commande suivante :
+ ```bash
+ npm install 
+ ```
+3) Lancer le serveur de développement
+ 
+ Pour lancer le serveur de développement, exécutez la commande suivante :
+ ```bash
+ npm run dev
+ ```
