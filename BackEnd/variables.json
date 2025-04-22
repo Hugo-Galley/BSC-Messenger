@@ -3,10 +3,10 @@
     "FileDestination" : "log/app.log"
   },
   "Bdd" : {
-    "Host" : "db",
+    "Host" : "localhost",
     "User" : "root",
     "Password" : "root",
     "DataBase" : "BSC-Messenger",
-    "Port" : "3306"
+    "Port" : "8889"
   }
 }
