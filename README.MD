@@ -81,6 +81,7 @@ Attention, si vous tentez d'envoyer des messages audio de *Chrome* vers *Safari*
 Dans `VsCode` sur le fichier `wait-for-it.sh`
 En bas à droite, cliquez sur l'indicateur de type de fin de ligne (probablement "CRLF").
 Changez-le en "LF".
+---
 L'application fonctionne grâce à des conteneurs `Docker`, ce qui permet un déploiement facile et une exécution sur n'importe quelle machine.  
 Pour cela, installez [Docker](https://www.docker.com/get-started/), placez-vous à la racine du projet, puis lancez la commande suivante :
 ```bash
