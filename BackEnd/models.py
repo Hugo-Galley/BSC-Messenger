@@ -57,6 +57,8 @@ class Messages(Base):
 
     id_message: Mapped[str] = mapped_column(CHAR(36), primary_key=True)
     content: Mapped[str] = mapped_column(LONGTEXT)
+    nonce: Mapped[str] = mapped_column(Text)
+    encryptedAesKey: Mapped[str] = mapped_column(Text)
     id_receiver: Mapped[str] = mapped_column(CHAR(36))
     sendAt: Mapped[datetime.datetime] = mapped_column(DateTime)
     id_conversation: Mapped[str] = mapped_column(CHAR(36))

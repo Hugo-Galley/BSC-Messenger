@@ -1,8 +1,7 @@
 import asyncio
-import base64
 import datetime
-import json
 import logging
+import base64
 import os
 import uuid
 from config import db
@@ -11,7 +10,6 @@ from Class.api_class_body import CreateNewConversation, AddMessageToConversation
 from models import Conversation, Messages, Users
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import padding
-from cryptography.hazmat.primitives.serialization import load_pem_public_key
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from sqlalchemy import desc, or_
 from sqlalchemy.orm import aliased
@@ -58,7 +56,9 @@ async def add_message_to_conversation(add_to_conv : AddMessageToConversation):
         newMessage = Messages(
             id_message = str(uuid.uuid4()),
             id_receiver = add_to_conv.id_receiver,
-            content = json.dumps(encrypted),
+            content = encrypted["encryptedContent"],
+            nonce = encrypted["nonce"],
+            encryptedAesKey = encrypted["encryptedAesKey"],
             sendAt = datetime.datetime.now(),
             id_conversation = add_to_conv.id_conversation,
             dataType =  add_to_conv.dataType
@@ -134,6 +134,8 @@ async def get_all_message(get_message : GetMessageOfConversation):
                     "id_message" : message.id_message,
                     "id_conversation" : message.id_conversation,
                     "content" : message.content,
+                    "nonce" : message.nonce,
+                    "encryptedAesKey" : message.encryptedAesKey,
                     "sendAt" : message.sendAt,
                     "id_receiver" : message.id_receiver,
                     "dataType" : message.dataType

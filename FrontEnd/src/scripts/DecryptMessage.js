@@ -62,13 +62,10 @@ async function GetPrivateKey(){
     })
 
 }
-export default async function DecryptMessage(content) {
+export default async function DecryptMessage(encryptedContent,nonce, encryptedAesKey) {
     try {
         const rawPrivateKey = await GetPrivateKey();
-        const finalPrivateKey = await importPrivateKey(rawPrivateKey);
-
-        const {encryptedContent, nonce, encryptedAesKey} = JSON.parse(content);
-        
+        const finalPrivateKey = await importPrivateKey(rawPrivateKey);        
 
         try {
             const encryptedAesKeyBytes = Uint8Array.from(atob(encryptedAesKey), c => c.charCodeAt(0));
